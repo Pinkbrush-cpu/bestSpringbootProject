@@ -167,13 +167,13 @@ body {
     font-weight: 700;
 }
 
-/* 修改密码卡片 */
-.password-card {
+/* 编辑资料卡片 */
+.edit-profile-card {
     background: white;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     padding: 40px;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -193,8 +193,14 @@ body {
 }
 
 /* 表单样式 */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .form-label {
@@ -234,21 +240,6 @@ body {
 
 .form-control.is-invalid + .invalid-feedback {
     display: block;
-}
-
-.password-strength {
-    margin-top: 10px;
-    height: 4px;
-    background-color: #eee;
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.strength-meter {
-    height: 100%;
-    width: 0;
-    background-color: #e63946;
-    transition: width 0.3s ease;
 }
 
 /* 按钮组 */
@@ -318,6 +309,15 @@ body {
         display: block;
     }
 
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
     .main-content {
         padding: 30px 20px;
     }
@@ -333,7 +333,11 @@ body {
 }
 
 @media (max-width: 768px) {
-    .password-card {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-profile-card {
         padding: 30px;
     }
 }

@@ -18,13 +18,6 @@ document.querySelectorAll('.menu-item').forEach(item => {
     });
 });
 
-// 移动端菜单切换
-const menuToggle = document.querySelector('.menu-toggle');
-const menu = document.querySelector('.menu');
-
-menuToggle.addEventListener('click', function() {
-    menu.classList.toggle('active');
-});
 
 // 密码强度检测
 document.getElementById('newPassword').addEventListener('input', function() {

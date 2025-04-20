@@ -92,4 +92,19 @@ public class LoginController {
         return "html/information";
     }
 
+    @RequestMapping("/html/modifyInformation")
+    public String modifyInformation(HttpServletRequest req,
+                              Model model) {
+        User user = (User)req.getSession().getAttribute("user");
+        model.addAttribute("username",user.getUsername());
+        return "html/modifyInformation";
+    }
+
+    @RequestMapping("/html/changePassword")
+    public String changePassword(HttpServletRequest req,
+                              Model model) {
+        User user = (User)req.getSession().getAttribute("user");
+        model.addAttribute("username",user.getUsername());
+        return "html/changePassword";
+    }
 }

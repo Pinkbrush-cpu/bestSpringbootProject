@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改密码 | 管理系统</title>
+    <title>编辑个人资料 | 管理系统</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/changePassword.css">
+    <link rel="stylesheet" href="/css/modifyInformation.css">
 </head>
 <body>
 <!-- 左侧导航栏 -->
@@ -79,50 +79,89 @@
 <!-- 右侧内容区 -->
 <main class="main-content">
     <div class="content-header">
-        <h1 class="content-title">修改密码</h1>
+        <h1 class="content-title">编辑个人资料</h1>
     </div>
 
-    <div class="password-card">
-        <form id="passwordForm">
-            <div class="section-title">
-                <i class="fas fa-lock"></i> 密码安全
-            </div>
-
-            <div class="form-group">
-                <label for="currentPassword" class="form-label">当前密码</label>
-                <input type="password" id="currentPassword" class="form-control" placeholder="请输入当前密码">
-                <small class="invalid-feedback">请输入当前密码</small>
-            </div>
-
-            <div class="form-group">
-                <label for="newPassword" class="form-label">新密码</label>
-                <input type="password" id="newPassword" class="form-control" placeholder="至少8位字符，包含字母和数字">
-                <div class="password-strength">
-                    <div class="strength-meter" id="strengthMeter"></div>
+    <div class="edit-profile-card">
+        <form id="profileForm">
+            <div class="form-grid">
+                <!-- 第一列 -->
+                <div class="form-group">
+                    <label for="username" class="form-label">用户名</label>
+                    <input type="text" id="username" class="form-control" value="zhangwei" disabled>
                 </div>
-                <small class="invalid-feedback">密码强度不足</small>
-            </div>
 
-            <div class="form-group">
-                <label for="confirmPassword" class="form-label">确认新密码</label>
-                <input type="password" id="confirmPassword" class="form-control" placeholder="再次输入新密码">
-                <small class="invalid-feedback">两次密码不一致</small>
+                <div class="form-group">
+                    <label for="realname" class="form-label">真实姓名</label>
+                    <input type="text" id="realname" class="form-control" value="张伟">
+                    <small class="invalid-feedback">请输入有效的姓名</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="form-label">性别</label>
+                    <select id="gender" class="form-control">
+                        <option value="male" selected>男</option>
+                        <option value="female">女</option>
+                        <option value="other">其他</option>
+                        <option value="secret">保密</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday" class="form-label">出生日期</label>
+                    <input type="date" id="birthday" class="form-control" value="1990-05-15">
+                </div>
+
+                <!-- 第二列 -->
+                <div class="form-group">
+                    <label for="email" class="form-label">电子邮箱</label>
+                    <input type="email" id="email" class="form-control" value="zhangwei@example.com">
+                    <small class="invalid-feedback">请输入有效的邮箱地址</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">手机号码</label>
+                    <input type="tel" id="phone" class="form-control" value="13800138000">
+                    <small class="invalid-feedback">请输入有效的手机号码</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="province" class="form-label">所在地区</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <select id="province" class="form-control">
+                            <option value="beijing" selected>北京市</option>
+                            <option value="shanghai">上海市</option>
+                            <option value="guangdong">广东省</option>
+                            <option value="zhejiang">浙江省</option>
+                        </select>
+                        <select id="city" class="form-control">
+                            <option value="beijing" selected>北京市</option>
+                            <option value="shanghai">上海市</option>
+                            <option value="guangzhou">广州市</option>
+                            <option value="shenzhen">深圳市</option>
+                            <option value="hangzhou">杭州市</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">详细地址</label>
+                    <input type="text" id="address" class="form-control" value="朝阳区建国路88号">
+                </div>
             </div>
 
             <div class="form-actions">
                 <a href="profile.html" class="btn btn-outline">
-                    <i class="fas fa-arrow-left"></i> 取消
+                    <i class="fas fa-arrow-left"></i> 返回
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> 确认修改
+                    <i class="fas fa-save"></i> 保存更改
                 </button>
             </div>
         </form>
     </div>
 </main>
 
-<script src="/js/changePassword.js">
-
-</script>
+<script src="/js/modifyInformation.js"></script>
 </body>
 </html>
