@@ -84,4 +84,12 @@ public class LoginController {
         }
     }
 
+    @RequestMapping("/html/information")
+    public String information(HttpServletRequest req,
+                              Model model) {
+        User user = (User)req.getSession().getAttribute("user");
+        model.addAttribute("username",user.getUsername());
+        return "html/information";
+    }
+
 }

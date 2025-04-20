@@ -1,0 +1,96 @@
+// 下拉菜单功能
+document.querySelectorAll('.menu-item').forEach(item => {
+    const link = item.querySelector('.menu-link');
+
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // 如果点击的是当前激活的菜单项，则关闭它
+        if (item.classList.contains('active')) {
+            item.classList.remove('active');
+        } else {
+            // 否则，先关闭所有菜单项，再打开当前点击的
+            document.querySelectorAll('.menu-item').forEach(i => {
+                i.classList.remove('active');
+            });
+            item.classList.add('active');
+        }
+    });
+});
+
+// 移动端菜单切换
+const menuToggle = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.menu');
+
+menuToggle.addEventListener('click', function() {
+    menu.classList.toggle('active');
+});
+
+// 密码强度检测
+document.getElementById('newPassword').addEventListener('input', function() {
+    const password = this.value;
+    const strengthMeter = document.getElementById('strengthMeter');
+    let strength = 0;
+
+    // 长度检测
+    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
+
+    // 复杂度检测
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/\d/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+    // 更新强度条
+    const width = strength * 20;
+    strengthMeter.style.width = width + '%';
+
+    // 更新颜色
+    if (strength <= 2) {
+        strengthMeter.style.backgroundColor = '#e63946'; // 弱
+    } else if (strength <= 4) {
+        strengthMeter.style.backgroundColor = '#f4a261'; // 中
+    } else {
+        strengthMeter.style.backgroundColor = '#2a9d8f'; // 强
+    }
+});
+
+// 表单验证
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let isValid = true;
+    const currentPassword = document.getElementById('currentPassword');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    // 验证当前密码
+    if (currentPassword.value.trim() === '') {
+        currentPassword.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        currentPassword.classList.remove('is-invalid');
+    }
+
+    // 验证新密码
+    if (newPassword.value.length < 8) {
+        newPassword.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        newPassword.classList.remove('is-invalid');
+    }
+
+    // 验证确认密码
+    if (confirmPassword.value !== newPassword.value) {
+        confirmPassword.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        confirmPassword.classList.remove('is-invalid');
+    }
+
+    // 如果验证通过
+    if (isValid) {
+        alert('密码修改成功！');
+        // 这里可以添加实际的表单提交逻辑
+    }
+});

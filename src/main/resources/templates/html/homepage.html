@@ -11,10 +11,10 @@
 <body>
 <!-- 左侧导航栏 -->
 <aside class="sidebar">
-    <a href="#" class="logo" th:text="${username}">PinkBrush</a>
+    <a th:href="@{/html/information}" class="logo" th:text="${username}">PinkBrush</a>
     <ul class="menu active">
         <li class="menu-item active">
-            <a href="#" class="menu-link active">
+            <a th:href="@{/homepage}" class="menu-link active">
                 <span class="menu-icon"><i class="fas fa-home"></i></span>
                 <span>首页</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
@@ -56,7 +56,7 @@
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a href="#" class="submenu-link">个人资料</a></li>
+                <li><a th:href="@{/html/information}" class="submenu-link">个人资料</a></li>
                 <li><a href="#" class="submenu-link">安全设置</a></li>
                 <li><a href="#" class="submenu-link">通知偏好</a></li>
             </ul>
