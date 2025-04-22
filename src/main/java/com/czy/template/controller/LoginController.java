@@ -134,12 +134,10 @@ public class LoginController {
         }
         User user = new User(((User)req.getSession().getAttribute("user")).getId(),realname,(String)req.getSession().getAttribute("username"), ((User)req.getSession().getAttribute("user")).getPassword(), phone, email,gender,address);
         if(userMapper.modifyPersonalInformation(user) == 1) {
-            System.out.println(123);
             req.getSession().setAttribute("user",user);
             req.getSession().setAttribute("username",user.getUsername());
             return "html/modifyInformation";
         } else {
-            System.out.println(456);
             return "redirect:/modifyInformation";
         }
     }
@@ -155,10 +153,10 @@ public class LoginController {
     @RequestMapping("/doChangePassword")
     public String doChangePassword(@RequestParam String password,
                                    @RequestParam String newPassword,
-                                   @RequestParam String reportNewPassword,
+                                   @RequestParam String confirmPassword,
                                    HttpServletRequest req){
         User user = (User)req.getSession().getAttribute("user");
-        if(user != null && user.getPassword().equals(password) && newPassword.equals(reportNewPassword)){
+        if(user != null && user.getPassword().equals(password) && newPassword.equals(confirmPassword)){
             if(userMapper.modifyPassword(newPassword,user.getId()) == 1){
                 return "redirect:/changePassword";
             }

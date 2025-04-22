@@ -1,10 +1,7 @@
 package com.czy.template.mapper;
 
 import com.czy.template.pojo.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 
 @Mapper
@@ -22,5 +19,5 @@ public interface UserMapper {
     int modifyPersonalInformation(User user);
 
     @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
-    int modifyPassword(String newPassword, int id);
+    int modifyPassword(@Param("password") String newPassword, int id);
 }
