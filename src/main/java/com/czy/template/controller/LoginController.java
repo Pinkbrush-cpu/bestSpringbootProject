@@ -18,12 +18,13 @@ public class LoginController {
     @Autowired
     UserMapper userMapper;
 
-    // 访问根路径时返回 index.html
+    // 访问根路径时返回 index.html，可以使用户直接访问登录页面
     @RequestMapping("/")
     public String index() {
         return "html/index";
     }
 
+    //登录请求
     @PostMapping("/dologin")
     public String loginIn(@RequestParam String username,
                           @RequestParam String password,
@@ -38,6 +39,7 @@ public class LoginController {
         return "html/index";
     }
 
+    //重定向到首页，为了防止别人看到请求头
     @RequestMapping("/homepage")
     public String homepage(HttpServletRequest req,
                            Model model) {
@@ -45,12 +47,14 @@ public class LoginController {
         return "html/homepage";
     }
 
+    //访问注册页面
     @RequestMapping("/register")
     public String register() {
         return "html/register";
     }
 
 
+    //注册页面提交表单时发送的请求
     @PostMapping("/doregister")
     public String register(@RequestParam String username,
                            @RequestParam String password,
@@ -84,6 +88,7 @@ public class LoginController {
         }
     }
 
+    //个人信息页面请求
     @RequestMapping("/html/information")
     public String information(HttpServletRequest req,
                               Model model) {
@@ -101,6 +106,7 @@ public class LoginController {
         return "html/information";
     }
 
+    //修改个人信息页面请求
     @RequestMapping("/html/modifyInformation")
     public String modifyInformation(HttpServletRequest req,
                                     Model model) {
@@ -113,7 +119,8 @@ public class LoginController {
         return "html/modifyInformation";
     }
 
-    @RequestMapping("/modifyPersonalInformation")
+    //修改个人信息页面表单的请求头
+    @RequestMapping("/doModifyPersonalInformation")
     public String modifyPersonalInformation(@RequestParam String realname,
                                             @RequestParam String phone,
                                             @RequestParam String email,
@@ -127,14 +134,17 @@ public class LoginController {
         }
         User user = new User(((User)req.getSession().getAttribute("user")).getId(),realname,(String)req.getSession().getAttribute("username"), ((User)req.getSession().getAttribute("user")).getPassword(), phone, email,gender,address);
         if(userMapper.modifyPersonalInformation(user) == 1) {
+            System.out.println(123);
             req.getSession().setAttribute("user",user);
             req.getSession().setAttribute("username",user.getUsername());
             return "html/modifyInformation";
         } else {
+            System.out.println(456);
             return "redirect:/html/modifyInformation";
         }
     }
 
+    //修改密码页面的请求
     @RequestMapping("/html/changePassword")
     public String changePassword(HttpServletRequest req,
                               Model model) {
