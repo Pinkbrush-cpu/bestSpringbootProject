@@ -90,46 +90,37 @@
         <div class="info-grid">
             <div class="info-item">
                 <div class="info-label">用户名</div>
-                <div class="info-value" th:text="${username}">zhangwei</div>
+                <div class="info-value" th:text="${username}"></div>
             </div>
 
             <div class="info-item">
                 <div class="info-label">真实姓名</div>
-                <div class="info-value" th:text="${username}">张伟</div>
+                <div class="info-value" th:text="${realname}">张伟</div>
             </div>
 
             <div class="info-item">
                 <div class="info-label">性别</div>
-                <div class="info-value" th:text="${username}">男</div>
-            </div>
-
-            <div class="info-item">
-                <div class="info-label">出生日期</div>
-                <div class="info-value" th:text="${username}">1990-05-15</div>
+                <div class="info-value" th:text="${gender}">男</div>
             </div>
 
             <div class="info-item">
                 <div class="info-label">电子邮箱</div>
-                <div class="info-value" th:text="${username}">zhangwei@example.com</div>
+                <div class="info-value" th:text="${email}"></div>
             </div>
 
             <div class="info-item">
                 <div class="info-label">手机号码</div>
-                <div class="info-value" th:text="${username}">138****8888</div>
+                <div class="info-value" th:text="${phone}"></div>
             </div>
 
             <div class="info-item">
                 <div class="info-label">所在地</div>
-                <div class="info-value" th:text="${username}">中国，北京市</div>
+                <div class="info-value" th:text="${address}"></div>
             </div>
 
-            <div class="info-item">
-                <div class="info-label">注册时间</div>
-                <div class="info-value" th:text="${username}">2018-06-12</div>
-            </div>
         </div>
 
-        <a href="#" class="edit-btn">
+        <a th:href="@{/html/modifyInformation}" class="edit-btn">
             <i class="fas fa-edit"></i> 编辑资料
         </a>
     </div>

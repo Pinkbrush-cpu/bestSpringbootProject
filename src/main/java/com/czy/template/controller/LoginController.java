@@ -31,6 +31,7 @@ public class LoginController {
         User user = userMapper.findByUsername(username);
         if(user != null && user.getPassword().equals(password)){
             req.getSession().setAttribute("user",user);
+            req.getSession().setAttribute("username",user.getUsername());
             return "redirect:/homepage";
         }
 
@@ -40,8 +41,7 @@ public class LoginController {
     @RequestMapping("/homepage")
     public String homepage(HttpServletRequest req,
                            Model model) {
-        User user = (User)req.getSession().getAttribute("user");
-        model.addAttribute("username",user.getUsername());
+        model.addAttribute("username",req.getSession().getAttribute("username"));
         return "html/homepage";
     }
 
@@ -70,7 +70,7 @@ public class LoginController {
 
         User user = userMapper.findByUsername(username);
         if(user == null){
-            User user1 = new User(0,username, password, phone, email);
+            User user1 = new User(0,"未填写",username, password, phone, email,'空',"未填写");
             int i = userMapper.registerUser(user1);
             if(i == 1) {
                 return "redirect:/";
@@ -88,23 +88,57 @@ public class LoginController {
     public String information(HttpServletRequest req,
                               Model model) {
         User user = (User)req.getSession().getAttribute("user");
+        model.addAttribute("realname",user.getRealname());
         model.addAttribute("username",user.getUsername());
+        model.addAttribute("phone",user.getPhone());
+        model.addAttribute("email",user.getEmail());
+        if(user.getGender() == '空') {
+            model.addAttribute("gender", "未填写");
+        } else {
+            model.addAttribute("gender", user.getGender());
+        }
+        model.addAttribute("address",user.getAddress());
         return "html/information";
     }
 
     @RequestMapping("/html/modifyInformation")
     public String modifyInformation(HttpServletRequest req,
-                              Model model) {
+                                    Model model) {
         User user = (User)req.getSession().getAttribute("user");
+        model.addAttribute("realname",user.getRealname());
         model.addAttribute("username",user.getUsername());
+        model.addAttribute("phone",user.getPhone());
+        model.addAttribute("email",user.getEmail());
+        model.addAttribute("address",user.getAddress());
         return "html/modifyInformation";
+    }
+
+    @RequestMapping("/modifyPersonalInformation")
+    public String modifyPersonalInformation(@RequestParam String realname,
+                                            @RequestParam String phone,
+                                            @RequestParam String email,
+                                            @RequestParam char gender,
+                                            @RequestParam String address,
+                                            HttpServletRequest req) {
+        if(gender == 'm'){
+            gender = '男';
+        } else {
+            gender = '女';
+        }
+        User user = new User(((User)req.getSession().getAttribute("user")).getId(),realname,(String)req.getSession().getAttribute("username"), ((User)req.getSession().getAttribute("user")).getPassword(), phone, email,gender,address);
+        if(userMapper.modifyPersonalInformation(user) == 1) {
+            req.getSession().setAttribute("user",user);
+            req.getSession().setAttribute("username",user.getUsername());
+            return "html/modifyInformation";
+        } else {
+            return "redirect:/html/modifyInformation";
+        }
     }
 
     @RequestMapping("/html/changePassword")
     public String changePassword(HttpServletRequest req,
                               Model model) {
-        User user = (User)req.getSession().getAttribute("user");
-        model.addAttribute("username",user.getUsername());
+        model.addAttribute("username",req.getSession().getAttribute("username"));
         return "html/changePassword";
     }
 }

@@ -76,11 +76,11 @@ body {
     letter-spacing: 0.5px;
 }
 
-.register-subtitle {
-    font-size: 16px;
-    color: var(--secondary-color);
-    line-height: 1.7;
-}
+/*.register-subtitle {*/
+/*    font-size: 16px;*/
+/*    color: var(--secondary-color);*/
+/*    line-height: 1.7;*/
+/*}*/
 
 /* 错误信息框样式 - 修改为动态显示 */
 .error-message {
