@@ -11,7 +11,7 @@
 <body>
 <!-- 左侧导航栏 -->
 <aside class="sidebar">
-    <a th:href="@{/html/information}" class="logo" th:text="${username}"></a>
+    <a th:href="@{/information}" class="logo" th:text="${username}"></a>
     <ul class="menu active">
         <li class="menu-item">
             <a href="#" class="menu-link">
@@ -56,9 +56,9 @@
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a th:href="@{/html/information}" class="submenu-link">个人资料</a></li>
-                <li><a th:href="@{/html/modifyInformation}" class="submenu-link">编辑资料</a></li>
-                <li><a th:href="@{/html/changePassword}" class="submenu-link">修改密码</a></li>
+                <li><a th:href="@{/information}" class="submenu-link">个人资料</a></li>
+                <li><a th:href="@{/modifyInformation}" class="submenu-link">编辑资料</a></li>
+                <li><a th:href="@{/changePassword}" class="submenu-link">修改密码</a></li>
             </ul>
         </li>
         <li class="menu-item">

@@ -89,7 +89,7 @@ public class LoginController {
     }
 
     //个人信息页面请求
-    @RequestMapping("/html/information")
+    @RequestMapping("/information")
     public String information(HttpServletRequest req,
                               Model model) {
         User user = (User)req.getSession().getAttribute("user");
@@ -107,7 +107,7 @@ public class LoginController {
     }
 
     //修改个人信息页面请求
-    @RequestMapping("/html/modifyInformation")
+    @RequestMapping("/modifyInformation")
     public String modifyInformation(HttpServletRequest req,
                                     Model model) {
         User user = (User)req.getSession().getAttribute("user");
@@ -140,15 +140,29 @@ public class LoginController {
             return "html/modifyInformation";
         } else {
             System.out.println(456);
-            return "redirect:/html/modifyInformation";
+            return "redirect:/modifyInformation";
         }
     }
 
     //修改密码页面的请求
-    @RequestMapping("/html/changePassword")
+    @RequestMapping("/changePassword")
     public String changePassword(HttpServletRequest req,
-                              Model model) {
+                                 Model model) {
         model.addAttribute("username",req.getSession().getAttribute("username"));
+        return "html/changePassword";
+    }
+
+    @RequestMapping("/doChangePassword")
+    public String doChangePassword(@RequestParam String password,
+                                   @RequestParam String newPassword,
+                                   @RequestParam String reportNewPassword,
+                                   HttpServletRequest req){
+        User user = (User)req.getSession().getAttribute("user");
+        if(user != null && user.getPassword().equals(password) && newPassword.equals(reportNewPassword)){
+            if(userMapper.modifyPassword(newPassword,user.getId()) == 1){
+                return "redirect:/changePassword";
+            }
+        }
         return "html/changePassword";
     }
 }

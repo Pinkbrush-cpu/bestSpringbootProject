@@ -20,4 +20,7 @@ public interface UserMapper {
     //修改个人信息
     @Update("UPDATE user SET realname = #{realname}, phone = #{phone}, email = #{email}, gender = #{gender}, address = #{address} WHERE id = #{id}")
     int modifyPersonalInformation(User user);
+
+    @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
+    int modifyPassword(String newPassword, int id);
 }

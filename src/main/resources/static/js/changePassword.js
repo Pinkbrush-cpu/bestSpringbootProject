@@ -81,9 +81,9 @@ document.getElementById('passwordForm').addEventListener('submit', function(e) {
         confirmPassword.classList.remove('is-invalid');
     }
 
-    // 如果验证通过
+    // 如果所有验证通过
     if (isValid) {
-        alert('密码修改成功！');
-        // 这里可以添加实际的表单提交逻辑
+        // 提交表单
+        document.getElementById('passwordForm').submit();
     }
 });
