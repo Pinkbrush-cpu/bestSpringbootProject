@@ -60,4 +60,65 @@ public class ManagerController {
         model.addAttribute("currentUserId", req.getSession().getAttribute("userId"));
         return "html/manager/managerAllUser";
     }
+
+    //修改学生权限为老师
+    @RequestMapping("/setTeacher")
+    public String setTeacher(String username){
+        User user = userMapper.findByUsername(username);
+        user.setIdentity(2);
+        userMapper.setAndCancel(user);
+        return "redirect:/managerAllUser";
+
+    }
+
+    //修改老师权限为学生
+    @RequestMapping("/cancelTeacher")
+    public String cancelTeacher(String username){
+        User user = userMapper.findByUsername(username);
+        user.setIdentity(1);
+        userMapper.setAndCancel(user);
+        return "redirect:/managerAllUser";
+    }
+
+    //修改学生权限为管理员
+    @RequestMapping("/setManager")
+    public String setManager(String username){
+        User user = userMapper.findByUsername(username);
+        user.setIdentity(10);
+        userMapper.setAndCancel(user);
+        return "redirect:/managerAllUser";
+    }
+
+    //修改管理员权限为学生
+    @RequestMapping("/cancelManager")
+    public String cancelManager(String username){
+        User user = userMapper.findByUsername(username);
+        user.setIdentity(1);
+        userMapper.setAndCancel(user);
+        return "redirect:/managerAllUser";
+    }
+
+    @RequestMapping("/managerUserStatistics")
+    public String managerUserStatistics(HttpServletRequest req,
+                                        Model model){
+        List<User> users = userMapper.selectAllUser();
+        int managerCount = 0;
+        int teacherCount = 0;
+        int userCount = 0;
+        for (User user : users) {
+            if(user.getIdentity() == 10){
+                managerCount++;
+            } else if (user.getIdentity() == 2) {
+                teacherCount++;
+            } else if (user.getIdentity() == 1) {
+                userCount++;
+            }
+        }
+        model.addAttribute("users",users);
+        model.addAttribute("currentUserId", req.getSession().getAttribute("userId"));
+        model.addAttribute("managerCount", managerCount);
+        model.addAttribute("teacherCount", teacherCount);
+        model.addAttribute("userCount", userCount);
+        return "html/manager/managerUserStatistics";
+    }
 }

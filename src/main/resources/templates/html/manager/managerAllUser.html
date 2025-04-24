@@ -33,7 +33,7 @@
                 </a>
                 <ul class="submenu">
                     <li><a th:href="@{/managerModifyPermission}" class="submenu-link">修改权限</a></li>
-                    <li><a th:href="@{/managerModifyPermission}" class="submenu-link">用户统计</a></li>
+                    <li><a th:href="@{/managerUserStatistics}" class="submenu-link">用户统计</a></li>
                 </ul>
             </li>
             <li class="menu-item">
@@ -116,40 +116,43 @@
                 </div>
                 <div class="user-actions">
                     <!-- 只有管理员能看到操作按钮 -->
-                    <div>
+                    <div style="display: flex; gap: 10px;">
                         <!-- 对学生显示"设为教师"按钮 -->
-                        <button th:if="${user.identity == 1}"
-                                class="btn btn-teacher"
-                                th:onclick="'setAsTeacher(' + ${user.id} + ')'">
-                            设为教师
-                        </button>
-
+                        <form action="/setTeacher" method="post" style="display: inline;">
+                            <input name="username" th:value="${user.username}" type="hidden">
+                            <button th:if="${user.identity == 1}"
+                                    class="btn btn-teacher">
+                                设为教师
+                            </button>
+                        </form>
                         <!-- 对教师显示"取消教师"按钮 -->
-                        <button th:if="${user.identity == 2}"
-                                class="btn btn-teacher"
-                                th:onclick="'removeTeacherRole(' + ${user.id} + ')'">
-                            取消教师
-                        </button>
-
+                        <form action="/cancelTeacher" method="post" style="display: inline;">
+                            <input name="username" th:value="${user.username}" type="hidden">
+                                <button th:if="${user.identity == 2}"
+                                        class="btn btn-teacher">
+                                    取消教师
+                                </button>
+                        </form>
                         <!-- 对学生或教师显示"设为管理员"按钮 -->
-                        <button th:if="${user.identity != 10}"
-                                class="btn btn-admin"
-                                th:onclick="'setAsAdmin(' + ${user.id} + ')'">
-                            设为管理员
-                        </button>
-
+                        <form action="/setManager" method="post" style="display: inline;">
+                            <input name="username" th:value="${user.username}" type="hidden">
+                                <button th:if="${user.identity != 10}"
+                                        class="btn btn-admin">
+                                    设为管理员
+                                </button>
+                        </form>
                         <!-- 对管理员（非自己）显示"取消管理员"按钮 -->
-                        <button th:if="${user.identity == 10 and user.id != currentUserId}"
-                                class="btn btn-admin"
-                                th:onclick="'removeAdminRole(' + ${userPower.user.id} + ')'">
-                            取消管理员
-                        </button>
+                        <form action="/cancelManager" method="post" style="display: inline;">
+                            <input name="username" th:value="${user.username}" type="hidden">
+                                <button th:if="${user.identity == 10 and user.id != currentUserId}"
+                                        class="btn btn-admin">
+                                    取消管理员
+                                </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/managerAllUser.js"></script>
 </body>
 </html>

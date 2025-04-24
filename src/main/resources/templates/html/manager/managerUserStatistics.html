@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改密码 | 管理系统</title>
+    <title>极简导航 | 用户管理</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/changePassword.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/managerUserStatistics.css">
 </head>
 <body>
 <!-- 左侧导航栏 -->
 <aside class="sidebar">
-    <a th:href="@{/information}" class="logo" th:text="${username}"></a>
-    <ul class="menu active">
+    <a th:href="@{/managerInformation}" class="logo" th:text="${username}">PinkBrush</a>
+    <ul class="menu">
         <li class="menu-item">
             <a th:href="@{/managerHomepage}" class="menu-link">
                 <span class="menu-icon"><i class="fas fa-home"></i></span>
@@ -20,13 +20,13 @@
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a href="#" class="submenu-link">概览</a></li>
+                <li><a href="#" class="submenu-link active">概览</a></li>
                 <li><a href="#" class="submenu-link">数据分析</a></li>
                 <li><a href="#" class="submenu-link">近期活动</a></li>
             </ul>
         </li>
-        <li class="menu-item">
-            <a href="#" class="menu-link">
+        <li class="menu-item active">
+            <a href="#" class="menu-link active">
                 <span class="menu-icon"><i class="fas fa-file-alt"></i></span>
                 <span>用户</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
@@ -48,8 +48,8 @@
                 <li><a href="#" class="submenu-link">用户行为</a></li>
             </ul>
         </li>
-        <li class="menu-item active">
-            <a href="#" class="menu-link active">
+        <li class="menu-item">
+            <a href="#" class="menu-link">
                 <span class="menu-icon"><i class="fas fa-cog"></i></span>
                 <span>设置</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
@@ -75,53 +75,77 @@
     </ul>
 </aside>
 
-<!-- 右侧内容区 -->
+<!-- 右侧内容 -->
 <main class="main-content">
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+
     <div class="content-header">
-        <h1 class="content-title">修改密码</h1>
+        <h1 class="welcome-title">用户管理</h1>
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="搜索用户..." >
+        </div>
     </div>
 
-    <div class="password-card">
-        <form id="passwordForm" action="/doChangePassword" method="post">
-            <div class="section-title">
-                <i class="fas fa-lock"></i> 密码安全
+    <!-- 用户统计卡片 -->
+    <div class="stats-container">
+        <a th:href="@{/admin/users(identity = 10)}" class="stat-card admin">
+            <div class="stat-title">管理员</div>
+            <div class="stat-value" th:text="${managerCount}">0</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up stat-icon"></i>
+                <span>与上月持平</span>
             </div>
+        </a>
 
-            <div class="form-group">
-                <label for="currentPassword" class="form-label">当前密码</label>
-                <input type="password" name="password" id="currentPassword" class="form-control" placeholder="请输入当前密码">
-                <small class="invalid-feedback">请输入当前密码</small>
+        <a th:href="@{/admin/users(identity = 2)}" class="stat-card teacher">
+            <div class="stat-title">教师</div>
+            <div class="stat-value" th:text="${teacherCount}">0</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up stat-icon"></i>
+                <span>比上月增加 1</span>
             </div>
+        </a>
 
-            <div class="form-group">
-                <label for="newPassword" class="form-label">新密码</label>
-                <input type="password" name="newPassword" id="newPassword" class="form-control" placeholder="至少8位字符，包含字母和数字">
-                <div class="password-strength">
-                    <div class="strength-meter" id="strengthMeter"></div>
+        <a th:href="@{/admin/users(identity = 1)}" class="stat-card user">
+            <div class="stat-title">普通用户</div>
+            <div class="stat-value" th:text="${userCount}">0</div>
+            <div class="stat-change negative">
+                <i class="fas fa-arrow-down stat-icon"></i>
+                <span>比上月减少 1</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="users-container">
+        <div class="users-header">
+            <div>用户</div>
+            <div>注册时间</div>
+            <div>权限</div>
+            <div>操作</div>
+        </div>
+
+        <!-- 用户列表 -->
+        <div th:each="user : ${users}" class="user-row">
+            <div class="user-name">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-                <small class="invalid-feedback">密码强度不足</small>
+                <div>
+                    <div th:text="${user.username}"></div>
+                    <div class="user-email" th:text="${user.email}"></div>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="confirmPassword" class="form-label">确认新密码</label>
-                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="再次输入新密码">
-                <small class="invalid-feedback">两次密码不一致</small>
+            <div th:text="${user.phone}"></div>
+            <div>
+                <!-- 根据用户权限显示不同样式 -->
+                <span th:classappend="${user.identity == 10 ? 'user-role admin' : (user.identity == 2 ? 'user-role teacher' : 'user-role student')}"
+                      th:text="${user.identity == 10 ? '管理员' : (user.identity == 2 ? '教师' : '学生')}">
+                    </span>
             </div>
-
-            <div class="form-actions">
-                <a href="profile.html" class="btn btn-outline">
-                    <i class="fas fa-arrow-left"></i> 取消
-                </a>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> 确认修改
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </main>
-
-<script src="/js/changePassword.js">
-
-</script>
 </body>
 </html>

@@ -27,4 +27,8 @@ public interface UserMapper {
     //查询全部用户
     @Select("SELECT * FROM user")
     List<User> selectAllUser();
+
+    //根据id修改用户权限
+    @Update("UPDATE user SET identity = #{identity} WHERE id = #{id}")
+    int setAndCancel(User user);
 }
