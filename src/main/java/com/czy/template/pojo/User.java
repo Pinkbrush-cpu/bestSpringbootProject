@@ -9,8 +9,9 @@ public class User {
     private String email;
     private char gender;
     private String  address;
+    private int identity;
 
-    public User(int id, String realname, String username, String password, String phone, String email, char gender, String address) {
+    public User(int id, String realname, String username, String password, String phone, String email, char gender, String address, int identity) {
         this.id = id;
         this.realname = realname;
         this.username = username;
@@ -19,10 +20,10 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.address = address;
+        this.identity = identity;
     }
 
     public User() {
-
     }
 
     public int getId() {
@@ -87,5 +88,13 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(int identity) {
+        this.identity = identity;
     }
 }

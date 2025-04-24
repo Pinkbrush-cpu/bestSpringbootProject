@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简导航 | 用户管理</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/managerAllUser.css">
+</head>
+<body>
+    <!-- 左侧导航栏 -->
+    <aside class="sidebar">
+        <a th:href="@{/managerInformation}" class="logo" th:text="${username}"></a>
+        <ul class="menu">
+            <li class="menu-item">
+                <a th:href="@{/managerHomepage}" class="menu-link">
+                    <span class="menu-icon"><i class="fas fa-home"></i></span>
+                    <span>首页</span>
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link active">概览</a></li>
+                    <li><a href="#" class="submenu-link">数据分析</a></li>
+                    <li><a href="#" class="submenu-link">近期活动</a></li>
+                </ul>
+            </li>
+            <li class="menu-item active">
+                <a href="#" class="menu-link active">
+                    <span class="menu-icon"><i class="fas fa-file-alt"></i></span>
+                    <span>用户</span>
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <ul class="submenu">
+                    <li><a th:href="@{/managerModifyPermission}" class="submenu-link">修改权限</a></li>
+                    <li><a th:href="@{/managerModifyPermission}" class="submenu-link">用户统计</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <span class="menu-icon"><i class="fas fa-chart-line"></i></span>
+                    <span>分析</span>
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link">数据统计</a></li>
+                    <li><a href="#" class="submenu-link">趋势分析</a></li>
+                    <li><a href="#" class="submenu-link">用户行为</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <span class="menu-icon"><i class="fas fa-cog"></i></span>
+                    <span>设置</span>
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <ul class="submenu">
+                    <li><a th:href="@{/managerInformation}" class="submenu-link">个人资料</a></li>
+                    <li><a th:href="@{/managerModifyInformation}" class="submenu-link">编辑资料</a></li>
+                    <li><a th:href="@{/managerChangePassword}" class="submenu-link">修改密码</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <span class="menu-icon"><i class="fas fa-users"></i></span>
+                    <span>团队</span>
+                    <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" class="submenu-link">成员管理</a></li>
+                    <li><a href="#" class="submenu-link">权限设置</a></li>
+                    <li><a href="#" class="submenu-link">团队统计</a></li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 右侧内容 -->
+    <main class="main-content">
+        <div class="decoration decoration-1"></div>
+        <div class="decoration decoration-2"></div>
+
+        <div class="content-header">
+            <h1 class="welcome-title">用户管理</h1>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="搜索用户...">
+            </div>
+        </div>
+
+        <div class="users-container">
+            <div class="users-header">
+                <div>用户</div>
+                <div>手机号</div>
+                <div>权限</div>
+                <div>操作</div>
+            </div>
+
+            <!-- 用户列表 -->
+            <div th:each="user : ${users}" class="user-row">
+                <div class="user-name">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div th:text="${user.username}"></div>
+                        <div class="user-email" th:text="${user.email}"></div>
+                    </div>
+                </div>
+                <div th:text="${user.phone}"></div>
+                <div>
+                    <!-- 根据用户权限显示不同样式 -->
+                    <span th:classappend="${user.identity == 10 ? 'user-role admin' : (user.identity == 2 ? 'user-role teacher' : 'user-role student')}"
+                          th:text="${user.identity == 10 ? '管理员' : (user.identity == 2 ? '教师' : '学生')}">
+                    </span>
+                </div>
+                <div class="user-actions">
+                    <!-- 只有管理员能看到操作按钮 -->
+                    <div>
+                        <!-- 对学生显示"设为教师"按钮 -->
+                        <button th:if="${user.identity == 1}"
+                                class="btn btn-teacher"
+                                th:onclick="'setAsTeacher(' + ${user.id} + ')'">
+                            设为教师
+                        </button>
+
+                        <!-- 对教师显示"取消教师"按钮 -->
+                        <button th:if="${user.identity == 2}"
+                                class="btn btn-teacher"
+                                th:onclick="'removeTeacherRole(' + ${user.id} + ')'">
+                            取消教师
+                        </button>
+
+                        <!-- 对学生或教师显示"设为管理员"按钮 -->
+                        <button th:if="${user.identity != 10}"
+                                class="btn btn-admin"
+                                th:onclick="'setAsAdmin(' + ${user.id} + ')'">
+                            设为管理员
+                        </button>
+
+                        <!-- 对管理员（非自己）显示"取消管理员"按钮 -->
+                        <button th:if="${user.identity == 10 and user.id != currentUserId}"
+                                class="btn btn-admin"
+                                th:onclick="'removeAdminRole(' + ${userPower.user.id} + ')'">
+                            取消管理员
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/managerAllUser.js"></script>
+</body>
+</html>

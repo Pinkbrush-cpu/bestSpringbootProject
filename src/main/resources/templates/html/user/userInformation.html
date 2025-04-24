@@ -123,9 +123,11 @@
         <a th:href="@{/html/modifyInformation}" class="edit-btn">
             <i class="fas fa-edit"></i> 编辑资料
         </a>
+        <div th:each="user : ${users}">
+            <div th:text="${usser}"></div>
+        </div>
     </div>
 </main>
 
-<script src="/js/information.js"></script>
 </body>
 </html>
