@@ -4,9 +4,11 @@ import com.czy.template.pojo.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -23,7 +25,7 @@ public class LoginFilter implements Filter {
         String path=req.getRequestURI();
 
         //判断访问的接口是否为dologin、login...等
-        if(path.contains("/login") || path.contains("/css/") || path.contains("/js/") || path.contains("/images/") || path.contains("/register")){
+        if(path.contains("/login") || path.contains("/dologin") || path.contains("/css/") || path.contains("/js/") || path.contains("/images/") || path.contains("/register")){
             //直接放行
             filterChain.doFilter(servletRequest, servletResponse);
             return;

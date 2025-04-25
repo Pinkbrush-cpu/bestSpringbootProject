@@ -18,7 +18,7 @@ public class LoginController {
     UserMapper userMapper;
 
     // 访问根路径时返回 index.html，可以使用户直接访问登录页面
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String index() {
         return "html/index";
     }
@@ -38,7 +38,7 @@ public class LoginController {
             } else if(user.getIdentity() == 2){
                 return "redirect:/teacherHomepage";
             }
-            return "redirect:/homepage";
+            return "redirect:/userHomepage";
         }
 
         return "html/index";
@@ -85,5 +85,12 @@ public class LoginController {
         }
     }
 
+
+    //退出登录
+    @RequestMapping("/dologinout")
+    public String loginout(HttpServletRequest req) {
+        req.getSession().removeAttribute("user");
+        return "redirect:/";
+    }
 
 }

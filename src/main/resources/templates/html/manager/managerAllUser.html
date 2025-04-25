@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/css/managerAllUser.css">
+    <link rel="stylesheet" href="/css/loginout.css">
 </head>
 <body>
     <!-- 左侧导航栏 -->
@@ -14,13 +15,13 @@
         <a th:href="@{/managerInformation}" class="logo" th:text="${username}"></a>
         <ul class="menu">
             <li class="menu-item">
-                <a th:href="@{/managerHomepage}" class="menu-link">
+                <a href="#" class="menu-link">
                     <span class="menu-icon"><i class="fas fa-home"></i></span>
                     <span>首页</span>
                     <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
                 </a>
                 <ul class="submenu">
-                    <li><a href="#" class="submenu-link active">概览</a></li>
+                    <li><a th:href="@{/managerHomepage}" class="submenu-link active">概览</a></li>
                     <li><a href="#" class="submenu-link">数据分析</a></li>
                     <li><a href="#" class="submenu-link">近期活动</a></li>
                 </ul>
@@ -55,9 +56,9 @@
                     <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
                 </a>
                 <ul class="submenu">
-                    <li><a th:href="@{/managerInformation}" class="submenu-link">个人资料</a></li>
-                    <li><a th:href="@{/managerModifyInformation}" class="submenu-link">编辑资料</a></li>
-                    <li><a th:href="@{/managerChangePassword}" class="submenu-link">修改密码</a></li>
+                    <li><a th:href="@{/information}" class="submenu-link">个人资料</a></li>
+                    <li><a th:href="@{/modifyInformation}" class="submenu-link">编辑资料</a></li>
+                    <li><a th:href="@{/changePassword}" class="submenu-link">修改密码</a></li>
                 </ul>
             </li>
             <li class="menu-item">
@@ -71,6 +72,13 @@
                     <li><a href="#" class="submenu-link">权限设置</a></li>
                     <li><a href="#" class="submenu-link">团队统计</a></li>
                 </ul>
+            </li>
+            <!-- 在菜单最下方添加退出登录选项 -->
+            <li class="menu-item logout">
+                <a href="#" class="menu-link" onclick="showLogoutModal()">
+                    <span class="menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+                    <span>退出登录</span>
+                </a>
             </li>
         </ul>
     </aside>
@@ -154,5 +162,22 @@
             </div>
         </div>
     </main>
+    <!-- 弹窗结构 -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-title">确定要退出登录吗？</div>
+            <p>退出后将无法访问受保护的内容</p>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" onclick="hideLogoutModal()">取消</button>
+                <form id="logoutForm" method="POST" action="/dologinout" style="display: inline;">
+                    <input type="hidden" name="_csrf">
+                    <button type="submit" class="modal-button confirm">确定退出</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/loginout.js"></script>
+    <script src="/js/dropMenu.js"></script>
+
 </body>
 </html>

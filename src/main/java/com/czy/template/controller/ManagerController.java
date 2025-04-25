@@ -24,20 +24,6 @@ public class ManagerController {
         return "html/manager/managerHomepage";
     }
 
-    @RequestMapping("/managerInformation")
-    public String managerInformation(HttpServletRequest req,
-                                     Model model) {
-        model.addAttribute("username", req.getSession().getAttribute("username"));
-        return "html/manager/managerInformation";
-    }
-
-    @RequestMapping("/managerModifyInformation")
-    public String managerModifyInformation(HttpServletRequest req,
-                                           Model model) {
-        model.addAttribute("username", req.getSession().getAttribute("username"));
-        return "html/manager/managerModifyInformation";
-    }
-
     @RequestMapping("/managerChangePassword")
     public String managerChangePassword(HttpServletRequest req,
                                         Model model) {
@@ -57,6 +43,7 @@ public class ManagerController {
                                  Model model){
         List<User> users = userMapper.selectAllUser();
         model.addAttribute("users",users);
+        model.addAttribute("username",req.getSession().getAttribute("username"));
         model.addAttribute("currentUserId", req.getSession().getAttribute("userId"));
         return "html/manager/managerAllUser";
     }
@@ -98,6 +85,7 @@ public class ManagerController {
         return "redirect:/managerAllUser";
     }
 
+    //统计用户数量
     @RequestMapping("/managerUserStatistics")
     public String managerUserStatistics(HttpServletRequest req,
                                         Model model){
@@ -114,6 +102,7 @@ public class ManagerController {
                 userCount++;
             }
         }
+        model.addAttribute("username",req.getSession().getAttribute("username"));
         model.addAttribute("users",users);
         model.addAttribute("currentUserId", req.getSession().getAttribute("userId"));
         model.addAttribute("managerCount", managerCount);
