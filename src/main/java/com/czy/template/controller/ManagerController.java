@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -109,5 +110,16 @@ public class ManagerController {
         model.addAttribute("teacherCount", teacherCount);
         model.addAttribute("userCount", userCount);
         return "html/manager/managerUserStatistics";
+    }
+
+    @RequestMapping("/searchUsers")
+    public String searchUsers(String search,
+                              HttpServletRequest req,
+                              Model model){
+        List<User> users = userMapper.searchUsers(search);
+        model.addAttribute("users",users);
+        model.addAttribute("username",req.getSession().getAttribute("username"));
+        model.addAttribute("currentUserId", req.getSession().getAttribute("userId"));
+        return "html/manager/managerAllUser";
     }
 }

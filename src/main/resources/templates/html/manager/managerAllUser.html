@@ -92,7 +92,9 @@
             <h1 class="welcome-title">用户管理</h1>
             <div class="search-box">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="搜索用户...">
+                <form action="/searchUsers" method="post">
+                    <input name="search" type="text" class="search-input" placeholder="搜索用户...">
+                </form>
             </div>
         </div>
 

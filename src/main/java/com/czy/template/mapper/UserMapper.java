@@ -31,4 +31,12 @@ public interface UserMapper {
     //根据id修改用户权限
     @Update("UPDATE user SET identity = #{identity} WHERE id = #{id}")
     int setAndCancel(User user);
+
+    //搜索框搜索用户
+    @Select("SELECT * FROM user where " +
+            "username like concat('%' , #{search} , '%') or " +
+            "realname like concat('%' , #{search} , '%') or " +
+            "phone like concat('%' , #{search} , '%') or " +
+            "email like concat('%' , #{search} , '%')")
+    List<User> searchUsers(String search);
 }
