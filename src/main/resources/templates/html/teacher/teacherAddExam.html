@@ -6,564 +6,7 @@
     <title>极简导航 | 试卷管理</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #2d3436;
-            --secondary-color: #636e72;
-            --accent-color: #0984e3;
-            --light-color: #f5f6fa;
-            --sidebar-width: 280px;
-            --transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--primary-color);
-            background-color: var(--light-color);
-            line-height: 1.6;
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* 左侧导航栏 */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: white;
-            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.05);
-            padding: 30px 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            letter-spacing: 1px;
-            display: block;
-            padding: 0 30px 30px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .menu {
-            list-style: none;
-            padding: 0 20px;
-        }
-
-        .menu-item {
-            margin-bottom: 5px;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: var(--secondary-color);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .menu-link:hover {
-            background-color: rgba(9, 132, 227, 0.1);
-            color: var(--accent-color);
-        }
-
-        .menu-link.active {
-            background-color: rgba(9, 132, 227, 0.1);
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .menu-icon {
-            margin-right: 12px;
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .submenu {
-            list-style: none;
-            max-height: 0;
-            overflow: hidden;
-            transition: var(--transition);
-            padding-left: 20px;
-        }
-
-        .menu-item.active .submenu {
-            max-height: 500px;
-            padding: 10px 0 10px 20px;
-        }
-
-        .submenu-link {
-            display: block;
-            padding: 8px 20px 8px 40px;
-            color: var(--secondary-color);
-            text-decoration: none;
-            border-radius: 6px;
-            transition: var(--transition);
-            position: relative;
-            font-size: 14px;
-        }
-
-        .submenu-link:hover, .submenu-link.active {
-            color: var(--accent-color);
-            background-color: rgba(9, 132, 227, 0.05);
-        }
-
-        .submenu-link:before {
-            content: '';
-            position: absolute;
-            left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .submenu-link:hover:before, .submenu-link.active:before {
-            opacity: 1;
-        }
-
-        .menu-arrow {
-            margin-left: auto;
-            transition: var(--transition);
-        }
-
-        .menu-item.active .menu-arrow {
-            transform: rotate(90deg);
-        }
-
-        /* 右侧内容 */
-        .main-content {
-            flex: 1;
-            padding: 60px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, rgba(245, 246, 250, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%);
-            position: relative;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .welcome-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--primary-color);
-            line-height: 1.2;
-        }
-
-        .exam-info {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-
-        .exam-info-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .exam-info-label {
-            font-weight: 500;
-            margin-right: 8px;
-            color: var(--secondary-color);
-        }
-
-        .exam-info-value {
-            font-weight: 600;
-        }
-
-        .btn {
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #0778d1;
-        }
-
-        .btn-secondary {
-            background-color: white;
-            color: var(--secondary-color);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-secondary:hover {
-            background-color: #f5f5f5;
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-
-        .btn-success {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #219653;
-        }
-
-        /* 试卷题目列表 */
-        .exam-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .questions-list {
-            flex: 1;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 30px;
-            position: relative;
-        }
-
-        .questions-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .question-item {
-            padding: 20px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .question-item:last-child {
-            border-bottom: none;
-        }
-
-        .question-item:hover {
-            background-color: rgba(9, 132, 227, 0.03);
-        }
-
-        .question-content-wrapper {
-            flex: 1;
-        }
-
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .question-title {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .question-score {
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .question-content {
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        .question-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .question-type {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            background-color: rgba(9, 132, 227, 0.1);
-            color: var(--accent-color);
-        }
-
-        /* 底部操作栏 */
-        .exam-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        /* 装饰元素 */
-        .decoration {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(9, 132, 227, 0.1) 0%, rgba(9, 132, 227, 0) 70%);
-            z-index: -1;
-        }
-
-        .decoration-1 {
-            top: -100px;
-            right: -100px;
-            width: 400px;
-            height: 400px;
-        }
-
-        .decoration-2 {
-            bottom: -50px;
-            left: -50px;
-            width: 250px;
-            height: 250px;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 992px) {
-            body {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding: 20px 0;
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            }
-
-            .logo {
-                padding: 0 20px 20px;
-            }
-
-            .main-content {
-                padding: 40px 20px;
-            }
-
-            .content-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .welcome-title {
-                margin-bottom: 20px;
-            }
-
-            .exam-container {
-                flex-direction: column;
-            }
-        }
-        /* 退出登录菜单项样式 */
-        .menu-item.logout {
-            margin-top: auto;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            padding-top: 10px;
-        }
-
-        .menu-item.logout .menu-link {
-            color: #e74c3c;
-        }
-
-        .menu-item.logout .menu-link:hover {
-            background-color: rgba(231, 76, 60, 0.1);
-        }
-
-        /* 弹窗样式 */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 500px;
-            max-width: 90%;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-title {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-
-        .modal-body {
-            margin-bottom: 25px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
-
-        .modal-button {
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .modal-button.cancel {
-            background-color: #f5f5f5;
-            color: var(--secondary-color);
-        }
-
-        .modal-button.confirm {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        /* 题目详情弹窗 */
-        .question-detail {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .question-detail-section {
-            margin-bottom: 20px;
-        }
-
-        .detail-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .detail-title .icon {
-            margin-right: 8px;
-            color: var(--accent-color);
-        }
-
-        .detail-content {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        /* 代码块样式 */
-        .code-block {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-
-        /* 选项列表样式 */
-        .options-list {
-            margin-top: 10px;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .option-letter {
-            font-weight: 600;
-            margin-right: 10px;
-            width: 20px;
-        }
-
-        .option-content {
-            flex: 1;
-        }
-
-        .correct-option {
-            color: #27ae60;
-            font-weight: 500;
-        }
-
-        /* 添加题目按钮样式 */
-        .add-question-btn {
-            padding: 8px 16px;
-            background-color: rgba(9, 132, 227, 0.1);
-            color: var(--accent-color);
-            border-radius: 6px;
-            font-weight: 500;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .add-question-btn:hover {
-            background-color: rgba(9, 132, 227, 0.2);
-        }
-    </style>
+    <link rel="stylesheet" href="/css/teacherAddExam.css">
 </head>
 <body>
 <!-- 左侧导航栏 -->
@@ -582,27 +25,27 @@
                 <li><a href="#" class="submenu-link">近期活动</a></li>
             </ul>
         </li>
-        <li class="menu-item">
-            <a href="#" class="menu-link">
+        <li class="menu-item active">
+            <a href="#" class="menu-link active">
                 <span class="menu-icon"><i class="fas fa-tasks"></i></span>
                 <span>题目管理</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
                 <li><a th:href="@{/teacherCreateQuestion}" class="submenu-link">创建题目</a></li>
-                <li><a th:href="@{/teacherQuestionBank}" class="submenu-link">题目列表</a></li>
+                <li><a th:href="@{/teacherViewTopic}" class="submenu-link active">题目列表</a></li>
                 <li><a th:href="@{/teacherQuestionStatistics}" class="submenu-link">题目统计</a></li>
             </ul>
         </li>
-        <li class="menu-item active">
-            <a href="#" class="menu-link active">
+        <li class="menu-item">
+            <a href="#" class="menu-link">
                 <span class="menu-icon"><i class="fas fa-chart-line"></i></span>
                 <span>考试管理</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a th:href="@{/teacherCreateExam}" class="submenu-link">创建考试</a></li>
-                <li><a th:href="@{/teacherExamList}" class="submenu-link active">试卷列表</a></li>
+                <li><a th:href="@{/teacherAddExam}" class="submenu-link">创建考试</a></li>
+                <li><a th:href="@{/teacherExamList}" class="submenu-link">考试列表</a></li>
                 <li><a th:href="@{/teacherExamStatistics}" class="submenu-link">成绩分析</a></li>
             </ul>
         </li>
@@ -640,7 +83,7 @@
     <div class="exam-info">
         <div class="exam-info-item">
             <span class="exam-info-label">状态：</span>
-            <span class="exam-info-value" th:text="${exam.status == 'draft' ? '草稿' : '已发布'}"></span>
+            <span class="exam-info-value" th:text="${exam.status}"></span>
         </div>
         <div class="exam-info-item">
             <span class="exam-info-label">总分：</span>
@@ -648,11 +91,7 @@
         </div>
         <div class="exam-info-item">
             <span class="exam-info-label">题数：</span>
-            <span class="exam-info-value" th:text="${exam.questions.size()}"></span>
-        </div>
-        <div class="exam-info-item">
-            <span class="exam-info-label">创建时间：</span>
-            <span class="exam-info-value" th:text="${#temporals.format(exam.createTime, 'yyyy-MM-dd HH:mm')}"></span>
+            <span class="exam-info-value" th:text="${totalTitle}"></span>
         </div>
     </div>
 
@@ -667,26 +106,27 @@
             </div>
 
             <!-- 题目列表 -->
-            <div th:each="eq : ${exam.questions}" class="question-item" th:data-id="${eq.id}" th:data-question-id="${eq.question.id}">
-                <div class="question-content-wrapper">
-                    <div class="question-header">
-                        <div class="question-title" th:text="${eq.question.title}">题目标题</div>
-                        <div class="question-score" th:text="${eq.score} + '分'">10分</div>
+            <form action="/addQuestion" method="post">
+                <div th:each="question : ${exam.questions}" class="question-item" th:data-id="${question.q_id}">
+                    <div class="question-content-wrapper">
+                        <div class="question-header">
+                            <div class="question-header">
+                                <span class="question-type" th:text="${question.type}">单选题</span>
+                                <span class="question-score" th:text="${question.score} + '分'">10分</span>
+                            </div>
+                            <div class="question-content" th:text="${question.title}">题目内容...</div>
+                        </div>
                     </div>
-                    <div class="question-content" th:text="${#strings.abbreviate(eq.question.content, 100)}">题目内容摘要...</div>
-                    <div>
-                        <span class="question-type" th:text="${#maps.typeMap.get(eq.question.type)}">单选题</span>
+                    <div class="question-actions">
+                        <button class="btn btn-primary" onclick="showQuestionDetail(event, this)">
+                            <i class="fas fa-eye"></i> 查看
+                        </button>
+                        <button class="btn btn-danger" onclick="showDeleteModal(event, this)">
+                            <i class="fas fa-trash"></i> 删除
+                        </button>
                     </div>
                 </div>
-                <div class="question-actions">
-                    <button class="btn btn-primary" onclick="showQuestionDetail(event, this)">
-                        <i class="fas fa-eye"></i> 查看
-                    </button>
-                    <button class="btn btn-danger" onclick="showDeleteModal(event, this)">
-                        <i class="fas fa-trash"></i> 删除
-                    </button>
-                </div>
-            </div>
+            </form>
 
             <!-- 无题目提示 -->
             <div th:if="${exam.questions.isEmpty()}" class="question-item" style="text-align: center; padding: 30px;">
@@ -714,7 +154,7 @@
         <div class="modal-buttons">
             <button class="modal-button cancel" onclick="hideLogoutModal()">取消</button>
             <form id="logoutForm" method="POST" action="/logout" style="display: inline;">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <input type="hidden" name="_csrf">
                 <button type="submit" class="modal-button confirm">确定退出</button>
             </form>
         </div>
@@ -722,42 +162,42 @@
 </div>
 
 <!-- 添加题目弹窗 -->
-<div class="modal-overlay" id="addQuestionModal">
-    <div class="modal-content">
-        <div class="modal-title">添加题目到试卷</div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="questionSearch" class="form-label">搜索题目</label>
-                <input type="text" id="questionSearch" class="form-control" placeholder="输入题目标题或内容搜索">
-            </div>
+<!--<div class="modal-overlay" id="addQuestionModal">-->
+<!--    <div class="modal-content">-->
+<!--        <div class="modal-title">添加题目到试卷</div>-->
+<!--        <div class="modal-body">-->
+<!--            <div class="form-group">-->
+<!--                <label for="questionSearch" class="form-label">搜索题目</label>-->
+<!--                <input type="text" id="questionSearch" class="form-control" placeholder="输入题目标题或内容搜索">-->
+<!--            </div>-->
 
-            <div id="questionSearchResults" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
-                <!-- 搜索结果将在这里显示 -->
-                <div th:each="question : ${availableQuestions}" class="question-item" style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;"
-                     th:data-id="${question.id}"
-                     th:data-title="${question.title}"
-                     th:data-content="${question.content}"
-                     th:data-type="${question.type}"
-                     onclick="selectQuestion(this)">
-                    <div class="question-title" th:text="${question.title}">题目标题</div>
-                    <div class="question-content" style="font-size: 13px;" th:text="${#strings.abbreviate(question.content, 80)}">题目内容摘要...</div>
-                    <div>
-                        <span class="question-type" th:text="${#maps.typeMap.get(question.type)}">单选题</span>
-                    </div>
-                </div>
-            </div>
+<!--            <div id="questionSearchResults" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">-->
+<!--                &lt;!&ndash; 搜索结果将在这里显示 &ndash;&gt;-->
+<!--                <div th:each="question : ${availableQuestions}" class="question-item" style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;"-->
+<!--                     th:data-id="${question.id}"-->
+<!--                     th:data-title="${question.title}"-->
+<!--                     th:data-content="${question.content}"-->
+<!--                     th:data-type="${question.type}"-->
+<!--                     onclick="selectQuestion(this)">-->
+<!--                    <div class="question-title" th:text="${question.title}">题目标题</div>-->
+<!--                    <div class="question-content" style="font-size: 13px;" th:text="${#strings.abbreviate(question.content, 80)}">题目内容摘要...</div>-->
+<!--                    <div>-->
+<!--                        <span class="question-type" th:text="${#maps.typeMap.get(question.type)}">单选题</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="form-group" style="margin-top: 15px;">
-                <label for="questionScoreInput" class="form-label">题目分值</label>
-                <input type="number" id="questionScoreInput" class="form-control" placeholder="请输入题目分值" min="1" value="10">
-            </div>
-        </div>
-        <div class="modal-buttons">
-            <button class="modal-button cancel" onclick="hideAddQuestionModal()">取消</button>
-            <button class="modal-button confirm" onclick="addQuestionToExam()">添加</button>
-        </div>
-    </div>
-</div>
+<!--            <div class="form-group" style="margin-top: 15px;">-->
+<!--                <label for="questionScoreInput" class="form-label">题目分值</label>-->
+<!--                <input type="number" id="questionScoreInput" class="form-control" placeholder="请输入题目分值" min="1" value="10">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="modal-buttons">-->
+<!--            <button class="modal-button cancel" onclick="hideAddQuestionModal()">取消</button>-->
+<!--            <button class="modal-button confirm" onclick="addQuestionToExam()">添加</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <!-- 题目详情弹窗 -->
 <div class="modal-overlay" id="questionDetailModal">
@@ -804,20 +244,6 @@
 <div class="modal-overlay" id="publishExamModal">
     <div class="modal-content">
         <div class="modal-title">发布考试</div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="examStartTime" class="form-label">开始时间</label>
-                <input type="datetime-local" id="examStartTime" class="form-control" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-ddTHH:mm')}">
-            </div>
-            <div class="form-group">
-                <label for="examEndTime" class="form-label">结束时间</label>
-                <input type="datetime-local" id="examEndTime" class="form-control" th:value="${#temporals.format(#temporals.createNow().plusHours(2), 'yyyy-MM-ddTHH:mm')}">
-            </div>
-            <div class="form-group">
-                <label for="examDuration" class="form-label">考试时长(分钟)</label>
-                <input type="number" id="examDuration" class="form-control" value="120" min="1">
-            </div>
-        </div>
         <div class="modal-buttons">
             <button class="modal-button cancel" onclick="hidePublishExamModal()">取消</button>
             <button class="modal-button confirm" onclick="publishExam()">确认发布</button>
@@ -825,299 +251,6 @@
     </div>
 </div>
 </body>
-<script>
-    // 当前选中的题目ID
-    let currentQuestionId = null;
-    let currentExamQuestionId = null;
-    const examId = [[${exam.id}]];
-
-    // 显示/隐藏退出登录弹窗
-    function showLogoutModal() {
-        document.getElementById('logoutModal').classList.add('active');
-    }
-    function hideLogoutModal() {
-        document.getElementById('logoutModal').classList.remove('active');
-    }
-
-    // 显示/隐藏添加题目弹窗
-    function showAddQuestionModal() {
-        document.getElementById('addQuestionModal').classList.add('active');
-    }
-    function hideAddQuestionModal() {
-        document.getElementById('addQuestionModal').classList.remove('active');
-    }
-
-    // 显示题目详情
-    function showQuestionDetail(event, element) {
-        event.stopPropagation();
-        const questionItem = element.closest('.question-item');
-        currentQuestionId = questionItem.getAttribute('data-question-id');
-        currentExamQuestionId = questionItem.getAttribute('data-id');
-
-        fetch('/teacherGetQuestionDetail?id=' + currentQuestionId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    renderQuestionDetail(data.question);
-                    document.getElementById('questionDetailModal').classList.add('active');
-                } else {
-                    alert(data.message || '获取题目详情失败');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('获取题目详情时发生错误');
-            });
-    }
-
-    function hideQuestionDetailModal() {
-        document.getElementById('questionDetailModal').classList.remove('active');
-    }
-
-    // 渲染题目详情
-    function renderQuestionDetail(question) {
-        const detailContent = document.getElementById('questionDetailContent');
-        let html = `
-            <div class="question-detail-section">
-                <div class="detail-title">
-                    <i class="fas fa-question-circle icon"></i>
-                    题目内容
-                </div>
-                <div class="detail-content">${question.content}</div>
-            </div>
-        `;
-
-        if (question.type === 'single_choice' || question.type === 'multiple_choice') {
-            html += `
-                <div class="question-detail-section">
-                    <div class="detail-title">
-                        <i class="fas fa-list-ol icon"></i>
-                        题目选项
-                    </div>
-                    <div class="options-list">
-            `;
-
-            question.options.forEach((option, index) => {
-                const letter = String.fromCharCode(65 + index);
-                const isCorrect = question.correctAnswers.includes(letter);
-                html += `
-                    <div class="option-item ${isCorrect ? 'correct-option' : ''}">
-                        <div class="option-letter">${letter}.</div>
-                        <div class="option-content">${option}</div>
-                    </div>
-                `;
-            });
-
-            html += `</div></div>`;
-        }
-
-        if (question.type === 'programming') {
-            html += `
-                <div class="question-detail-section">
-                    <div class="detail-title">
-                        <i class="fas fa-code icon"></i>
-                        初始代码
-                    </div>
-                    <div class="code-block">${question.templateCode || '无'}</div>
-                </div>
-                <div class="question-detail-section">
-                    <div class="detail-title">
-                        <i class="fas fa-vial icon"></i>
-                        测试用例
-                    </div>
-                    <div class="detail-content">${question.testCases || '无'}</div>
-                </div>
-            `;
-        }
-
-        if (question.analysis) {
-            html += `
-                <div class="question-detail-section">
-                    <div class="detail-title">
-                        <i class="fas fa-lightbulb icon"></i>
-                        题目解析
-                    </div>
-                    <div class="detail-content">${question.analysis}</div>
-                </div>
-            `;
-        }
-
-        detailContent.innerHTML = html;
-        document.getElementById('detailModalTitle').textContent = question.title;
-    }
-
-    // 选择题目
-    function selectQuestion(element) {
-        // 移除之前选中的样式
-        document.querySelectorAll('#questionSearchResults .question-item').forEach(item => {
-            item.style.backgroundColor = '';
-        });
-
-        // 添加选中样式
-        element.style.backgroundColor = 'rgba(9, 132, 227, 0.1)';
-        currentQuestionId = element.getAttribute('data-id');
-    }
-
-    // 添加题目到试卷
-    function addQuestionToExam() {
-        if (!currentQuestionId) {
-            alert('请先选择题目');
-            return;
-        }
-
-        const score = document.getElementById('questionScoreInput').value;
-        if (!score || score <= 0) {
-            alert('请输入有效的分值');
-            return;
-        }
-
-        fetch('/teacherAddQuestionToExam', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value
-            },
-            body: `examId=${examId}&questionId=${currentQuestionId}&score=${score}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('题目已成功添加到试卷');
-                    window.location.reload();
-                } else {
-                    alert(data.message || '添加题目失败');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('添加题目时发生错误');
-            });
-    }
-
-    // 显示删除题目弹窗
-    function showDeleteModal(event, element) {
-        event.stopPropagation();
-        const questionItem = element.closest('.question-item');
-        currentExamQuestionId = questionItem.getAttribute('data-id');
-        document.getElementById('deleteQuestionModal').classList.add('active');
-    }
-
-    function hideDeleteModal() {
-        document.getElementById('deleteQuestionModal').classList.remove('active');
-    }
-
-    // 删除题目
-    function deleteQuestion() {
-        fetch('/teacherRemoveQuestionFromExam', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value
-            },
-            body: `examQuestionId=${currentExamQuestionId}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('题目已从试卷中删除');
-                    window.location.reload();
-                } else {
-                    alert(data.message || '删除题目失败');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('删除题目时发生错误');
-            });
-    }
-
-    // 显示/隐藏删除全部题目弹窗
-    function showDeleteAllModal() {
-        document.getElementById('deleteAllQuestionsModal').classList.add('active');
-    }
-    function hideDeleteAllModal() {
-        document.getElementById('deleteAllQuestionsModal').classList.remove('active');
-    }
-
-    // 删除全部题目
-    function deleteAllQuestions() {
-        fetch('/teacherRemoveAllQuestionsFromExam', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value
-            },
-            body: `examId=${examId}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('所有题目已从试卷中删除');
-                    window.location.reload();
-                } else {
-                    alert(data.message || '删除题目失败');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('删除题目时发生错误');
-            });
-    }
-
-    // 显示/隐藏发布考试弹窗
-    function showPublishExamModal() {
-        document.getElementById('publishExamModal').classList.add('active');
-    }
-    function hidePublishExamModal() {
-        document.getElementById('publishExamModal').classList.remove('active');
-    }
-
-    // 发布考试
-    function publishExam() {
-        const startTime = document.getElementById('examStartTime').value;
-        const endTime = document.getElementById('examEndTime').value;
-        const duration = document.getElementById('examDuration').value;
-
-        if (!startTime || !endTime || !duration) {
-            alert('请填写完整的考试信息');
-            return;
-        }
-
-        fetch('/teacherPublishExam', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value
-            },
-            body: `examId=${examId}&startTime=${startTime}&endTime=${endTime}&duration=${duration}`
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('考试已成功发布');
-                    window.location.reload();
-                } else {
-                    alert(data.message || '发布考试失败');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('发布考试时发生错误');
-            });
-    }
-
-    // 搜索题目功能
-    document.getElementById('questionSearch').addEventListener('input', function() {
-        const keyword = this.value.toLowerCase();
-        document.querySelectorAll('#questionSearchResults .question-item').forEach(item => {
-            const title = item.getAttribute('data-title').toLowerCase();
-            const content = item.getAttribute('data-content').toLowerCase();
-            if (title.includes(keyword) || content.includes(keyword)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-</script>
+<script src="/js/loginout.js"></script>
+<script src="/js/teacherAddExam.js"></script>
 </html>

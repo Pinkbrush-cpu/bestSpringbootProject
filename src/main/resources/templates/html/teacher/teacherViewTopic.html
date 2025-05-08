@@ -44,7 +44,7 @@
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a th:href="@{/teacherCreateExam}" class="submenu-link">创建考试</a></li>
+                <li><a th:href="@{/teacherAddExam}" class="submenu-link">创建考试</a></li>
                 <li><a th:href="@{/teacherExamList}" class="submenu-link">考试列表</a></li>
                 <li><a th:href="@{/teacherExamStatistics}" class="submenu-link">成绩分析</a></li>
             </ul>
@@ -87,25 +87,43 @@
     <div class="questions-container">
         <div class="questions-header">
             <div>题目</div>
+            <div>分值</div>
             <div>类型</div>
             <div>操作</div>
         </div>
 
         <!-- 题目列表 -->
-        <div th:each="question : ${questions}" class="question-row">
-            <div>
-                <div class="question-title" th:text="${question.title}"></div>
-                <div class="question-content" th:if="${question.options}" th:text="${question.options}"></div>
+        <form action="/addQuestion" method="post">
+            <div th:each="question : ${questions}" class="question-row">
+                <div>
+                    <div class="question-title" th:text="${question.title}"></div>
+                    <div class="question-content" th:if="${question.options}" th:text="${question.options}"></div>
+                </div>
+                <div>
+                    <span class="question-score" th:text="${question.score}"></span>
+                </div>
+                <div>
+                    <span class="question-type" th:text="${question.type}"></span>
+                </div>
+                <input type="hidden" name="questionId" id="questionId" th:value="${question.q_id}"/>
+                <div class="question-actions">
+                    <!-- 如果题目已添加到试卷，显示“取消添加”按钮 -->
+                    <button type="submit" class="btn btn-onclick"
+                            th:if="${addedQuestionIds.contains(question.q_id)}"
+                            th:name="action" th:value="remove"
+                            th:attr="onclick='setQuestionId(${question.q_id})'">
+                        <i class="fas fa-minus"></i> 取消添加
+                    </button>
+                    <!-- 如果题目未添加到试卷，显示“添加到试卷”按钮 -->
+                    <button type="submit" class="btn btn-primary"
+                            th:if="${!addedQuestionIds.contains(question.q_id)}"
+                            th:name="action" th:value="add"
+                            th:attr="onclick='setQuestionId(${question.q_id})'">
+                        <i class="fas fa-plus"></i> 添加到试卷
+                    </button>
+                </div>
             </div>
-            <div>
-                <span class="question-type" th:text="${question.type}"></span>
-            </div>
-            <div class="question-actions">
-                <button type="button" class="btn btn-primary" onclick="showAddToExamModal([[${question.id}]], [[${question.title}]])">
-                    <i class="fas fa-plus"></i> 添加到试卷
-                </button>
-            </div>
-        </div>
+        </form>
 
         <!-- 无数据提示 -->
         <div th:if="${#lists.isEmpty(questions)}" class="question-row" style="text-align: center; padding: 30px;">
@@ -113,36 +131,6 @@
         </div>
     </div>
 
-    <!-- 分页 -->
-<!--    <div th:if="${! #lists.isEmpty(questions)}" class="pagination-container">-->
-<!--        <ul class="pagination">-->
-<!--            <li class="pagination-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
-<!--                <a th:href="@{/teacherQuestionBank(page=1, keyword=${searchKeyword})}" class="pagination-link">-->
-<!--                    <i class="fas fa-angle-double-left"></i>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li class="pagination-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
-<!--                <a th:href="@{/teacherQuestionBank(page=${currentPage-1}, keyword=${searchKeyword})}" class="pagination-link">-->
-<!--                    <i class="fas fa-angle-left"></i>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            <li th:each="page : ${#numbers.sequence(1, totalPages)}" class="pagination-item" th:classappend="${page == currentPage} ? 'active'">-->
-<!--                <a th:href="@{/teacherQuestionBank(page=${page}, keyword=${searchKeyword})}" class="pagination-link" th:text="${page}"></a>-->
-<!--            </li>-->
-
-<!--            <li class="pagination-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
-<!--                <a th:href="@{/teacherQuestionBank(page=${currentPage+1}, keyword=${searchKeyword})}" class="pagination-link">-->
-<!--                    <i class="fas fa-angle-right"></i>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li class="pagination-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
-<!--                <a th:href="@{/teacherQuestionBank(page=${totalPages}, keyword=${searchKeyword})}" class="pagination-link">-->
-<!--                    <i class="fas fa-angle-double-right"></i>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
 </main>
 
 <!-- 退出登录弹窗 -->
@@ -183,4 +171,6 @@
 </div>
 </body>
 <script src="/js/teacherViewTopic.js"></script>
+<script src="/js/dropMenu.js"></script>
+<script src="/js/loginout.js"></script>
 </html>

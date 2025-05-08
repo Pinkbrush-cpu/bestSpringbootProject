@@ -14,7 +14,7 @@
 <aside class="sidebar">
     <a th:href="@{/teacherInformation}" class="logo" th:text="${username}">PinkBrush</a>
     <ul class="menu active">
-        <li class="menu-item">
+        <li class="menu-item active">
             <a th:href="@{/teacherHomepage}" class="menu-link  active">
                 <span class="menu-icon"><i class="fas fa-home"></i></span>
                 <span>首页</span>
@@ -26,7 +26,7 @@
                 <li><a href="#" class="submenu-link">近期活动</a></li>
             </ul>
         </li>
-        <li class="menu-item active">
+        <li class="menu-item">
             <a href="#" class="menu-link">
                 <span class="menu-icon"><i class="fas fa-tasks"></i></span>
                 <span>题目管理</span>
@@ -45,7 +45,7 @@
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a th:href="@{/teacherCreateExam}" class="submenu-link">创建考试</a></li>
+                <li><a th:href="@{/teacherAddExam}" class="submenu-link">创建考试</a></li>
                 <li><a th:href="@{/teacherExamList}" class="submenu-link">考试列表</a></li>
                 <li><a th:href="@{/teacherExamStatistics}" class="submenu-link">成绩分析</a></li>
             </ul>
