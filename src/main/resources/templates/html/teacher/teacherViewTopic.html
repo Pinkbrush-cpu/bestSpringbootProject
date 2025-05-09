@@ -93,8 +93,9 @@
         </div>
 
         <!-- 题目列表 -->
+        <div th:each="question : ${questions}">
         <form action="/addQuestion" method="post">
-            <div th:each="question : ${questions}" class="question-row">
+            <div class="question-row">
                 <div>
                     <div class="question-title" th:text="${question.title}"></div>
                     <div class="question-content" th:if="${question.options}" th:text="${question.options}"></div>
@@ -105,25 +106,24 @@
                 <div>
                     <span class="question-type" th:text="${question.type}"></span>
                 </div>
-                <input type="hidden" name="questionId" id="questionId" th:value="${question.q_id}"/>
                 <div class="question-actions">
                     <!-- 如果题目已添加到试卷，显示“取消添加”按钮 -->
                     <button type="submit" class="btn btn-onclick"
-                            th:if="${addedQuestionIds.contains(question.q_id)}"
-                            th:name="action" th:value="remove"
-                            th:attr="onclick='setQuestionId(${question.q_id})'">
+                            th:if="${addedQuestionIds.contains(question.qId.longValue())}"
+                            th:name="action" th:value="remove">
                         <i class="fas fa-minus"></i> 取消添加
                     </button>
                     <!-- 如果题目未添加到试卷，显示“添加到试卷”按钮 -->
                     <button type="submit" class="btn btn-primary"
-                            th:if="${!addedQuestionIds.contains(question.q_id)}"
-                            th:name="action" th:value="add"
-                            th:attr="onclick='setQuestionId(${question.q_id})'">
+                            th:if="${!addedQuestionIds.contains(question.qId.longValue())}"
+                            th:name="action" th:value="add">
                         <i class="fas fa-plus"></i> 添加到试卷
                     </button>
                 </div>
+                <input type="hidden" name="questionId" id="questionId" th:value="${question.qId}"/>
             </div>
         </form>
+        </div>
 
         <!-- 无数据提示 -->
         <div th:if="${#lists.isEmpty(questions)}" class="question-row" style="text-align: center; padding: 30px;">

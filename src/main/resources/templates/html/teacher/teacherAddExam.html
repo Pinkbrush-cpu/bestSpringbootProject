@@ -107,7 +107,7 @@
 
             <!-- 题目列表 -->
             <form action="/addQuestion" method="post">
-                <div th:each="question : ${exam.questions}" class="question-item" th:data-id="${question.q_id}">
+                <div th:each="question : ${exam.questions}" class="question-item" th:data-id="${question.qId}">
                     <div class="question-content-wrapper">
                         <div class="question-header">
                             <div class="question-header">

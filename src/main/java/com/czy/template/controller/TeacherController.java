@@ -8,14 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class TeacherController {
@@ -51,21 +47,22 @@ public class TeacherController {
         model.addAttribute("username",req.getSession().getAttribute("username"));
         Question question;
         if(options.equals("[,]"))
-            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, "", answer, "", score);
+            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, "","", answer, score);
         else {
-            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, options.toString(), answer, "", score);
+            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, options.toString(), "", answer, score);
         }
         teacherMapper.createQuestion(question);
         return "redirect:/teacherViewTopic";
     }
 
+    //所有题目
     @RequestMapping("/teacherViewTopic")
     public String teacherViewTopic(HttpServletRequest req,
                                    Model model) {
-        Set<Integer> addedQuestionIds = (Set<Integer>) model.getAttribute("addedQuestionIds");
+        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
         if (addedQuestionIds == null) {
-            addedQuestionIds = new HashSet<>();
-            addedQuestionIds.add(0);
+            addedQuestionIds = new ArrayList<>();
+            addedQuestionIds.add(-1L);
         }
 
         List<Question> questions = teacherMapper.selectAllQuestion((Integer) req.getSession().getAttribute("userId"));
@@ -77,6 +74,7 @@ public class TeacherController {
         model.addAttribute("questions",questions);
         model.addAttribute("username",req.getSession().getAttribute("username"));
         model.addAttribute("addedQuestionIds",addedQuestionIds);
+        req.getSession().setAttribute("addedQuestionIds",addedQuestionIds);
         return "html/teacher/teacherViewTopic";
     }
 
@@ -90,7 +88,17 @@ public class TeacherController {
             exam = new Exam();
             exam.setQuestions(new ArrayList<>());
         }
-
+        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
+        for(Long id: addedQuestionIds){
+            if(id == -1){
+                continue;
+            }
+            int i = id.intValue();
+            Question question = teacherMapper.selectQuestion(i);
+            exam.getQuestions().add(question);
+            exam.setTotalScore(exam.getTotalScore() + question.getScore());
+            exam.setTotalTitle(exam.getTotalTitle() + 1);
+        }
         model.addAttribute("exam",exam);
         model.addAttribute("totalScore",exam.getTotalScore());
         model.addAttribute("totalTitle",exam.getTotalTitle());
@@ -98,14 +106,15 @@ public class TeacherController {
     }
 
     //添加到试卷|取消添加
-    @PostMapping("/addQuestion")
+    @RequestMapping("/addQuestion")
     public String addQuestion(@RequestParam int questionId,
                               @RequestParam String action,
-                              Model model) {
+                              Model model,
+                              HttpServletRequest req) {
         // 获取当前已添加的题目 ID 集合
-        Set<Integer> addedQuestionIds = (Set<Integer>) model.getAttribute("addedQuestionIds");
+        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
         if (addedQuestionIds == null) {
-            addedQuestionIds = new HashSet<>();
+            addedQuestionIds = new ArrayList<>();
         }
 
         Exam exam = (Exam) model.getAttribute("exam");
@@ -116,10 +125,10 @@ public class TeacherController {
 
         // 根据 action 参数决定是添加还是移除题目
         if ("add".equals(action)) {
-            addedQuestionIds.add(questionId);
+            addedQuestionIds.add((long) questionId);
             exam.getQuestions().add(teacherMapper.selectQuestion(questionId));
         } else if ("remove".equals(action)) {
-            addedQuestionIds.remove(questionId);
+            addedQuestionIds.remove((long)questionId);
             exam.getQuestions().remove(teacherMapper.selectQuestion(questionId));
         }
 
@@ -127,7 +136,7 @@ public class TeacherController {
         model.addAttribute("exam",exam);
         model.addAttribute("totalScore",exam.getTotalScore());
         model.addAttribute("totalTitle",exam.getTotalTitle());
-        model.addAttribute("addedQuestionIds", addedQuestionIds);
+        req.getSession().setAttribute("addedQuestionIds",addedQuestionIds);
 
         // 重新加载页面
         return "redirect:/teacherViewTopic";
