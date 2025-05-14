@@ -89,6 +89,10 @@ public class TeacherController {
             exam.setQuestions(new ArrayList<>());
         }
         List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
+        if(addedQuestionIds == null){
+            addedQuestionIds = new ArrayList<>();
+            addedQuestionIds.add(-1L);
+        }
         for(Long id: addedQuestionIds){
             if(id == -1){
                 continue;
@@ -127,17 +131,17 @@ public class TeacherController {
         if ("add".equals(action)) {
             addedQuestionIds.add((long) questionId);
             exam.getQuestions().add(teacherMapper.selectQuestion(questionId));
-        } else if ("remove".equals(action)) {
+        } else if ("remove".equals(action) || "delete".equals(action)) {
             addedQuestionIds.remove((long)questionId);
             exam.getQuestions().remove(teacherMapper.selectQuestion(questionId));
         }
 
-        // 将更新后的集合放回 model
-        model.addAttribute("exam",exam);
-        model.addAttribute("totalScore",exam.getTotalScore());
-        model.addAttribute("totalTitle",exam.getTotalTitle());
+        // 将更新后的集合放回 session
         req.getSession().setAttribute("addedQuestionIds",addedQuestionIds);
 
+        if("delete".equals(action)){
+            return "redirect:/teacherAddExam";
+        }
         // 重新加载页面
         return "redirect:/teacherViewTopic";
     }
@@ -147,11 +151,7 @@ public class TeacherController {
     public String deleteAllItems(HttpServletRequest req,
                                  Model model) {
         model.addAttribute("username",req.getSession().getAttribute("username"));
-        Exam exam = new Exam();
-        exam.setQuestions(new ArrayList<Question>());
-        model.addAttribute("exam",exam);
-        model.addAttribute("totalScore",0);
-        model.addAttribute("totalTitle",0);
-        return "html/teacher/teacherAddExam";
+        req.getSession().setAttribute("addedQuestionIds",new ArrayList<>());
+        return "redirect:/teacherAddExam";
     }
 }

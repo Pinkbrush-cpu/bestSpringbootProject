@@ -11,28 +11,20 @@ function hideDeleteModal() {
 }
 
 // 删除题目
-function deleteQuestion() {
-    fetch('/teacherRemoveQuestionFromExam', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value
-        },
-        body: `examQuestionId=${currentExamQuestionId}`
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('题目已从试卷中删除');
-                window.location.reload();
-            } else {
-                alert(data.message || '删除题目失败');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('删除题目时发生错误');
-        });
+function deleteAllQuestions() {
+    fetch('/deleteAllItems', {
+        method: 'POST'
+    }).then(r => {
+        // 检查响应是否成功
+        if (!r.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // 刷新页面
+        location.reload();
+    }).catch(error => {
+        // 处理可能的错误
+        console.error('There was a problem with the fetch operation:', error);
+    });
 }
 
 // 显示/隐藏删除全部题目弹窗
@@ -76,16 +68,3 @@ function publishExam() {
         });
 }
 
-// 搜索题目功能
-document.getElementById('questionSearch').addEventListener('input', function() {
-    const keyword = this.value.toLowerCase();
-    document.querySelectorAll('#questionSearchResults .question-item').forEach(item => {
-        const title = item.getAttribute('data-title').toLowerCase();
-        const content = item.getAttribute('data-content').toLowerCase();
-        if (title.includes(keyword) || content.includes(keyword)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-});

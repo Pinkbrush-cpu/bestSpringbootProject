@@ -33,7 +33,7 @@
             </a>
             <ul class="submenu">
                 <li><a th:href="@{/teacherCreateQuestion}" class="submenu-link active">创建题目</a></li>
-                <li><a th:href="@{/teacherViewTopic}" class="submenu-link">题库管理</a></li>
+                <li><a th:href="@{/teacherViewTopic}" class="submenu-link">题目列表</a></li>
                 <li><a th:href="@{/teacherQuestionStatistics}" class="submenu-link">题目统计</a></li>
             </ul>
         </li>
@@ -45,8 +45,8 @@
             </a>
             <ul class="submenu">
                 <li><a th:href="@{/teacherAddExam}" class="submenu-link">创建考试</a></li>
-                <li><a href="#" class="submenu-link">考试列表</a></li>
-                <li><a href="#" class="submenu-link">成绩分析</a></li>
+                <li><a th:href="@{/teacherExamList}" class="submenu-link">考试列表</a></li>
+                <li><a th:href="@{/teacherExamStatistics}" class="submenu-link">成绩分析</a></li>
             </ul>
         </li>
         <li class="menu-item">
@@ -169,4 +169,5 @@
 </body>
 <script src="/js/createQuestion.js"></script>
 <script src="/js/loginout.js"></script>
+<script src="/js/dropMenu.js"></script>
 </html>

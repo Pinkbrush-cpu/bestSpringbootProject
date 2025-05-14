@@ -11,7 +11,7 @@
 <body>
 <!-- 左侧导航栏 -->
 <aside class="sidebar">
-    <a th:href="@{/teacherInformation}" class="logo" th:text="${username}"></a>
+    <a class="logo" th:text="${username}"></a>
     <ul class="menu">
         <li class="menu-item">
             <a th:href="@{/teacherHomepage}" class="menu-link">
@@ -25,26 +25,26 @@
                 <li><a href="#" class="submenu-link">近期活动</a></li>
             </ul>
         </li>
-        <li class="menu-item active">
-            <a href="#" class="menu-link active">
+        <li class="menu-item">
+            <a href="#" class="menu-link">
                 <span class="menu-icon"><i class="fas fa-tasks"></i></span>
                 <span>题目管理</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
                 <li><a th:href="@{/teacherCreateQuestion}" class="submenu-link">创建题目</a></li>
-                <li><a th:href="@{/teacherViewTopic}" class="submenu-link active">题目列表</a></li>
+                <li><a th:href="@{/teacherViewTopic}" class="submenu-link">题目列表</a></li>
                 <li><a th:href="@{/teacherQuestionStatistics}" class="submenu-link">题目统计</a></li>
             </ul>
         </li>
-        <li class="menu-item">
-            <a href="#" class="menu-link">
+        <li class="menu-item active">
+            <a href="#" class="menu-link active">
                 <span class="menu-icon"><i class="fas fa-chart-line"></i></span>
                 <span>考试管理</span>
                 <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
             </a>
             <ul class="submenu">
-                <li><a th:href="@{/teacherAddExam}" class="submenu-link">创建考试</a></li>
+                <li><a th:href="@{/teacherAddExam}" class="submenu-link active">创建考试</a></li>
                 <li><a th:href="@{/teacherExamList}" class="submenu-link">考试列表</a></li>
                 <li><a th:href="@{/teacherExamStatistics}" class="submenu-link">成绩分析</a></li>
             </ul>
@@ -106,27 +106,28 @@
             </div>
 
             <!-- 题目列表 -->
-            <form action="/addQuestion" method="post">
-                <div th:each="question : ${exam.questions}" class="question-item" th:data-id="${question.qId}">
-                    <div class="question-content-wrapper">
-                        <div class="question-header">
+            <div th:each="question : ${exam.questions}">
+                <form action="/addQuestion" method="post">
+                    <div class="question-item" th:data-id="${question.qId}">
+                        <div class="question-content-wrapper">
                             <div class="question-header">
-                                <span class="question-type" th:text="${question.type}">单选题</span>
-                                <span class="question-score" th:text="${question.score} + '分'">10分</span>
+                                <div class="question-header">
+                                    <span class="question-type" th:text="${question.type}">单选题</span>
+                                    <span class="question-score" th:text="${question.score} + '分'">10分</span>
+                                </div>
+                                <div class="question-content" th:text="${question.title}">题目内容...</div>
                             </div>
-                            <div class="question-content" th:text="${question.title}">题目内容...</div>
                         </div>
+                        <div class="question-actions">
+                            <button type="submit" value="delete" name="action" class="btn btn-danger" onclick="showDeleteModal(event, this)">
+                                <i class="fas fa-trash"></i> 删除
+                            </button>
+                        </div>
+                        <input type="hidden" name="questionId" id="questionId" th:value="${question.qId}"/>
                     </div>
-                    <div class="question-actions">
-                        <button class="btn btn-primary" onclick="showQuestionDetail(event, this)">
-                            <i class="fas fa-eye"></i> 查看
-                        </button>
-                        <button class="btn btn-danger" onclick="showDeleteModal(event, this)">
-                            <i class="fas fa-trash"></i> 删除
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
 
             <!-- 无题目提示 -->
             <div th:if="${exam.questions.isEmpty()}" class="question-item" style="text-align: center; padding: 30px;">
@@ -161,71 +162,6 @@
     </div>
 </div>
 
-<!-- 添加题目弹窗 -->
-<!--<div class="modal-overlay" id="addQuestionModal">-->
-<!--    <div class="modal-content">-->
-<!--        <div class="modal-title">添加题目到试卷</div>-->
-<!--        <div class="modal-body">-->
-<!--            <div class="form-group">-->
-<!--                <label for="questionSearch" class="form-label">搜索题目</label>-->
-<!--                <input type="text" id="questionSearch" class="form-control" placeholder="输入题目标题或内容搜索">-->
-<!--            </div>-->
-
-<!--            <div id="questionSearchResults" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">-->
-<!--                &lt;!&ndash; 搜索结果将在这里显示 &ndash;&gt;-->
-<!--                <div th:each="question : ${availableQuestions}" class="question-item" style="padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;"-->
-<!--                     th:data-id="${question.id}"-->
-<!--                     th:data-title="${question.title}"-->
-<!--                     th:data-content="${question.content}"-->
-<!--                     th:data-type="${question.type}"-->
-<!--                     onclick="selectQuestion(this)">-->
-<!--                    <div class="question-title" th:text="${question.title}">题目标题</div>-->
-<!--                    <div class="question-content" style="font-size: 13px;" th:text="${#strings.abbreviate(question.content, 80)}">题目内容摘要...</div>-->
-<!--                    <div>-->
-<!--                        <span class="question-type" th:text="${#maps.typeMap.get(question.type)}">单选题</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="form-group" style="margin-top: 15px;">-->
-<!--                <label for="questionScoreInput" class="form-label">题目分值</label>-->
-<!--                <input type="number" id="questionScoreInput" class="form-control" placeholder="请输入题目分值" min="1" value="10">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="modal-buttons">-->
-<!--            <button class="modal-button cancel" onclick="hideAddQuestionModal()">取消</button>-->
-<!--            <button class="modal-button confirm" onclick="addQuestionToExam()">添加</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!-- 题目详情弹窗 -->
-<div class="modal-overlay" id="questionDetailModal">
-    <div class="modal-content">
-        <div class="modal-title" id="detailModalTitle">题目详情</div>
-        <div class="modal-body question-detail" id="questionDetailContent">
-            <!-- 题目详情将通过JavaScript动态填充 -->
-        </div>
-        <div class="modal-buttons">
-            <button class="modal-button cancel" onclick="hideQuestionDetailModal()">关闭</button>
-        </div>
-    </div>
-</div>
-
-<!-- 删除题目确认弹窗 -->
-<div class="modal-overlay" id="deleteQuestionModal">
-    <div class="modal-content">
-        <div class="modal-title">确认删除</div>
-        <div class="modal-body">
-            <p>确定要从试卷中删除这道题目吗？</p>
-        </div>
-        <div class="modal-buttons">
-            <button class="modal-button cancel" onclick="hideDeleteModal()">取消</button>
-            <button class="modal-button confirm" onclick="deleteQuestion()">确认删除</button>
-        </div>
-    </div>
-</div>
-
 <!-- 删除全部题目确认弹窗 -->
 <div class="modal-overlay" id="deleteAllQuestionsModal">
     <div class="modal-content">
@@ -253,4 +189,5 @@
 </body>
 <script src="/js/loginout.js"></script>
 <script src="/js/teacherAddExam.js"></script>
+<script src="/js/dropMenu.js"></script>
 </html>
