@@ -40,7 +40,6 @@ public class LoginController {
             }
             return "redirect:/userHomepage";
         }
-
         return "html/index";
     }
 
