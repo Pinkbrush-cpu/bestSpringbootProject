@@ -22,7 +22,7 @@ public interface UserMapper {
 
     //修改密码
     @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
-    int modifyPassword(@Param("password") String newPassword, int id);
+    int changePassword(@Param("password") String newPassword, int id);
 
     //查询全部用户
     @Select("SELECT * FROM user")
