@@ -7,6 +7,7 @@ import com.czy.template.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +42,9 @@ public class LoginController {
         // 权限路由
         String redirectUrl;
         switch (user.getIdentity()) {
-            case 1:  redirectUrl = "/studentHomepage";  break;
-            case 2:  redirectUrl = "/teacherHomepage"; break;
-            case 10: redirectUrl = "/managerHomepage"; break;
+            case 1:  redirectUrl = "/common/studentHomepage";  break;
+            case 2:  redirectUrl = "/educator/teacherHomepage"; break;
+            case 10: redirectUrl = "/admin/managerHomepage"; break;
             default: return Result.error("用户权限错误，请联系管理员");
         }
 

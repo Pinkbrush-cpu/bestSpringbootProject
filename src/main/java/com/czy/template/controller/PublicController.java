@@ -1,24 +1,20 @@
 package com.czy.template.controller;
 
-import com.czy.template.dto.changePwdDTO;
-import com.czy.template.dto.modifyInformationDTO;
+import com.czy.template.dto.ChangePwdDTO;
+import com.czy.template.dto.ModifyInformationDTO;
 import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
 import com.czy.template.util.JwtUtil;
 import com.czy.template.util.Result;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pink")
+@RequestMapping("/pink/{identity}")
 public class PublicController {
 
     @Autowired
@@ -29,9 +25,10 @@ public class PublicController {
 
     //修改个人信息页面请求
     @PostMapping("/modifyInformation")
-    public Result<Map<String, Object>> modifyInformation(@RequestBody modifyInformationDTO dto,
+    public Result<Map<String, Object>> modifyInformation(@RequestBody ModifyInformationDTO dto,
                                                          HttpServletRequest req) {
         User user = jwtUtil.getUserFromRequest(req);
+
         if (user == null) {
             return Result.error("未登录");
         }
@@ -63,7 +60,7 @@ public class PublicController {
     }
 
     @PostMapping("/changePassword")
-    public Result<String> changePassword(@RequestBody changePwdDTO dto,
+    public Result<String> changePassword(@RequestBody ChangePwdDTO dto,
                                          HttpServletRequest req) {
         // 1. 拿当前登录人
         User user = jwtUtil.getUserFromRequest(req);

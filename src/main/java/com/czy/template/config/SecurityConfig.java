@@ -15,11 +15,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())        // 关闭 CSRF（前后端分离项目常见）
-                .cors(Customizer.withDefaults())       // 如已配全局 CORS，可改为 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/pink/**").permitAll() // 放行所有 /pink 开头的接口
-                        .anyRequest().authenticated()            // 其余需登录
-                );
+                .cors(Customizer.withDefaults())  ;     // 如已配全局 CORS，可改为 .cors(Customizer.withDefaults())
         return http.build();
     }
 }

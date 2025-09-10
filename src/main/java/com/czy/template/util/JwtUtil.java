@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 @Component
@@ -60,4 +59,6 @@ public class JwtUtil {
         String username = getUsernameFromRequest(request);
         return username == null ? null : userMapper.findByUsername(username);
     }
+
+
 }

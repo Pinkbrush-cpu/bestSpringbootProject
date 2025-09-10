@@ -1,9 +1,12 @@
 package com.czy.template.mapper;
 
+import com.czy.template.dto.ModifyInformationDTO;
 import com.czy.template.pojo.User;
+import com.czy.template.vo.UserVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Mapper
@@ -24,19 +27,51 @@ public interface UserMapper {
     @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
     int changePassword(@Param("password") String newPassword, int id);
 
+    //总条数
+    @Select({"<script>",
+            "SELECT COUNT(*) FROM user",
+            "<where>",
+            "  <if test='onlyOne'> id > 1 </if>",
+            "  <if test='keyword != null and keyword != \"\"'>",
+            "    AND (username LIKE CONCAT('%',#{keyword},'%')",
+            "         OR realname LIKE CONCAT('%',#{keyword},'%')",
+            "         OR phone   LIKE CONCAT('%',#{keyword},'%'))",
+            "  </if>",
+            "</where>",
+            "</script>"})
+    Long countByKeyword(@Param("keyword") String keyword,
+                        @Param("onlyOne") boolean onlyOne);
+
+    //当前页数据
+    @Select({"<script>",
+            "SELECT id,username,email,phone,identity FROM user",
+            "<where>",
+            "  <if test='onlyOne'> id > 1 </if>",
+            "  <if test='keyword != null and keyword != \"\"'>",
+            "    AND (username LIKE CONCAT('%',#{keyword},'%')",
+            "         OR realname LIKE CONCAT('%',#{keyword},'%')",
+            "         OR phone   LIKE CONCAT('%',#{keyword},'%'))",
+            "  </if>",
+            "</where>",
+            "ORDER BY identity DESC, id DESC",
+            "LIMIT #{offset}, #{size}",
+            "</script>"})
+    List<UserVO> selectPageByKeyword(@Param("offset") long offset,
+                                     @Param("size") int size,
+                                     @Param("keyword") String keyword,
+                                     @Param("onlyOne") boolean onlyOne);
+
     //查询全部用户
     @Select("SELECT * FROM user")
     List<User> selectAllUser();
+
+    //根据id查询用户
+    @Select("SELECT username, realname, phone, email, gender, address " +
+            "FROM user WHERE id = #{userId}")
+    Optional<ModifyInformationDTO> selectUserById(Long userId);
 
     //根据id修改用户权限
     @Update("UPDATE user SET identity = #{identity} WHERE id = #{id}")
     int setAndCancel(User user);
 
-    //搜索框搜索用户
-    @Select("SELECT * FROM user where " +
-            "username like concat('%' , #{search} , '%') or " +
-            "realname like concat('%' , #{search} , '%') or " +
-            "phone like concat('%' , #{search} , '%') or " +
-            "email like concat('%' , #{search} , '%')")
-    List<User> searchUsers(String search);
 }
