@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageRespDTO<T> {
-    private List<T> records; // 当前页数据
+    private List<T> list;    // 当前页数据
     private long    total;   // 总条数
+    private long    pages;   // 总页数
     private long    current; // 当前页码
     private long    size;    // 每页条数
-    private long    pages;   // 总页数
 }

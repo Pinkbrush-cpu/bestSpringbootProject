@@ -55,6 +55,7 @@ public class LoginController {
         data.put("redirectUrl", redirectUrl);
         data.put("user", user);
 
+
         return Result.ok("登录成功", data);
     }
 

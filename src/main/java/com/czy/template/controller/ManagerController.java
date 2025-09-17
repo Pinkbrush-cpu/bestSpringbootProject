@@ -4,6 +4,7 @@ import com.czy.template.dto.ModifyInformationDTO;
 import com.czy.template.dto.PageRespDTO;
 import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
+import com.czy.template.service.ManagerService;
 import com.czy.template.util.JwtUtil;
 import com.czy.template.util.Result;
 import com.czy.template.vo.UserVO;
@@ -24,6 +25,9 @@ public class ManagerController {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    ManagerService managerService;
 
     @Autowired
     JwtUtil jwtUtil;

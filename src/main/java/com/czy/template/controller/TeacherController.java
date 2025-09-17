@@ -1,157 +1,123 @@
 package com.czy.template.controller;
 
+import com.czy.template.dto.IdsDTO;
+import com.czy.template.dto.PageRespDTO;
+import com.czy.template.dto.PublicExamDTO;
+import com.czy.template.dto.QuestionCreateDTO;
 import com.czy.template.mapper.TeacherMapper;
-import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.Question;
+import com.czy.template.service.TeacherService;
+import com.czy.template.util.JwtUtil;
+import com.czy.template.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Controller
+@RestController
+@RequestMapping("/pink/educator")
 public class TeacherController {
-
-    @Autowired
-    UserMapper userMapper;
 
     @Autowired
     TeacherMapper teacherMapper;
 
-    @RequestMapping("/teacherHomepage")
-    public String teacherHomepage(HttpServletRequest req,
-                                  Model model) {
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        return "html/teacher/teacherHomepage";
-    }
+    @Autowired
+    TeacherService teacherService;
 
-    @RequestMapping("/teacherCreateQuestion")
-    public String teacherCreateQuestion(HttpServletRequest req,
-                                  Model model) {
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        return "html/teacher/teacherCreateQuestion";
-    }
+    @Autowired
+    JwtUtil jwtUtil;
 
-    @RequestMapping("/createQuestion")
-    public String createQuestion(int score,
-                                 String type,
-                                 String title,
-                                 @RequestParam(required = false) List<String> options,
-                                 String answer,
-                                 HttpServletRequest req,
-                                 Model model) {
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        Question question;
-        if(options.equals("[,]"))
-            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, "","", answer, score);
-        else {
-            question = new Question(0, (Integer) req.getSession().getAttribute("userId"), type, title, options.toString(), "", answer, score);
+    @PostMapping("/createQuestion")
+    public Result<String> createQuestion(@Validated @RequestBody QuestionCreateDTO dto) {
+        if (dto != null && teacherService.create(dto)){
+        // 返回 200 + 完整实体
+            return Result.ok("题目保存成功");
+        } else {
+            return Result.error("保存失败");
         }
-        teacherMapper.createQuestion(question);
-        return "redirect:/teacherViewTopic";
     }
 
     //所有题目
-    @RequestMapping("/teacherViewTopic")
-    public String teacherViewTopic(HttpServletRequest req,
-                                   Model model) {
-        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
-        if (addedQuestionIds == null) {
-            addedQuestionIds = new ArrayList<>();
-            addedQuestionIds.add(-1L);
-        }
+    @GetMapping("/teacherViewTopic")
+    public Result<PageRespDTO<Question>> teacherAllTopic(@RequestParam Map<String, Object> param,
+                                                         HttpServletRequest request) {
+        // ① 把分页缺省值写进 Map（仅当请求未传时）
+        param.putIfAbsent("page", 1);
+        param.putIfAbsent("size", 8);
 
-        List<Question> questions = teacherMapper.selectAllQuestion((Integer) req.getSession().getAttribute("userId"));
-        for(Question question : questions){
-            if(question.getOptions().equals("[, ]")){
-                question.setOptions(null);
-            }
-        }
-        model.addAttribute("questions",questions);
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        model.addAttribute("addedQuestionIds",addedQuestionIds);
-        req.getSession().setAttribute("addedQuestionIds",addedQuestionIds);
-        return "html/teacher/teacherViewTopic";
+        // ② 直接扔给 Service，Controller 不再关心任何业务
+        return teacherService.listTeacherQuestion(param, request);
+    }
+
+    //删除题目
+    @DeleteMapping("/deleteQuestions")
+    public Boolean deleteQuestions(@RequestBody IdsDTO ids) {
+
+        return teacherService.listDeleteQuestion(ids);
+
+    }
+
+    //将选中的题目信息返回前端
+    @PostMapping("/selectQuestion")
+    public Result<List<Question>> selectQuestion(@RequestBody IdsDTO ids) {
+
+        return teacherService.selectQuestion(ids);
+
+    }
+
+
+    @PutMapping("/{qId}/updateQuestion")
+    public Result<Void> updateQuestion(@PathVariable Long qId,
+                                       @RequestBody @Valid QuestionCreateDTO dto){
+        if(teacherService.updateQuestionService(dto,qId))
+            return Result.ok();
+
+        return Result.error("更新失败，稍后重试");
     }
 
     //教师端查看考试内容
-    @RequestMapping("/teacherAddExam")
-    public String teacherAddExam(HttpServletRequest req,
-                                   Model model) {
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        Exam exam = (Exam) model.getAttribute("exam");
-        if(exam == null){
-            exam = new Exam();
-            exam.setQuestions(new ArrayList<>());
+    @RequestMapping("/publishExam")
+    public Result<Void> teacherPublicExam(@RequestBody @Valid PublicExamDTO dto) {
+
+        if(dto.getExamId() == 0 && teacherService.publishExamService(dto)){
+            return Result.ok();
         }
-        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
-        if(addedQuestionIds == null){
-            addedQuestionIds = new ArrayList<>();
-            addedQuestionIds.add(-1L);
-        }
-        for(Long id: addedQuestionIds){
-            if(id == -1){
-                continue;
-            }
-            int i = id.intValue();
-            Question question = teacherMapper.selectQuestion(i);
-            exam.getQuestions().add(question);
-            exam.setTotalScore(exam.getTotalScore() + question.getScore());
-            exam.setTotalTitle(exam.getTotalTitle() + 1);
-        }
-        model.addAttribute("exam",exam);
-        model.addAttribute("totalScore",exam.getTotalScore());
-        model.addAttribute("totalTitle",exam.getTotalTitle());
-        return "html/teacher/teacherAddExam";
+
+        return Result.error("发布失败");
     }
 
-    //添加到试卷|取消添加
-    @RequestMapping("/addQuestion")
-    public String addQuestion(@RequestParam int questionId,
-                              @RequestParam String action,
-                              Model model,
-                              HttpServletRequest req) {
-        // 获取当前已添加的题目 ID 集合
-        List<Long> addedQuestionIds = (List<Long>) req.getSession().getAttribute("addedQuestionIds");
-        if (addedQuestionIds == null) {
-            addedQuestionIds = new ArrayList<>();
-        }
+    //返回所有考试
+    @GetMapping("/examList")
+    public Result<PageRespDTO<PublicExamDTO>> examList(
+            @RequestParam(defaultValue = "1") long page,
+            @RequestParam(defaultValue = "7") long size) {
 
-        Exam exam = (Exam) model.getAttribute("exam");
-        if(exam == null){
-            exam = new Exam();
-            exam.setQuestions(new ArrayList<>());
-        }
-
-        // 根据 action 参数决定是添加还是移除题目
-        if ("add".equals(action)) {
-            addedQuestionIds.add((long) questionId);
-            exam.getQuestions().add(teacherMapper.selectQuestion(questionId));
-        } else if ("remove".equals(action) || "delete".equals(action)) {
-            addedQuestionIds.remove((long)questionId);
-            exam.getQuestions().remove(teacherMapper.selectQuestion(questionId));
-        }
-
-        // 将更新后的集合放回 session
-        req.getSession().setAttribute("addedQuestionIds",addedQuestionIds);
-
-        if("delete".equals(action)){
-            return "redirect:/teacherAddExam";
-        }
-        // 重新加载页面
-        return "redirect:/teacherViewTopic";
+        // 伪数据：实际替换成 MP/JPA 分页
+        List<PublicExamDTO> records = List.of(
+                new PublicExamDTO(142857, "2025 春季期中", List.of(38,40,37,45,36,43,46,39,47), 100, 20),
+                new PublicExamDTO(142858, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142859, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142860, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142861, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142862, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142863, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142864, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142865, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142863, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142864, "2025 春季月考", List.of(36,41), 80, 15),
+                new PublicExamDTO(142865, "2025 春季月考", List.of(36,41), 80, 15)
+        );
+        long total = records.size();                       // 数据库 count
+        long pages = (total + size - 1) / size;
+        PageRespDTO<PublicExamDTO> resp = new PageRespDTO<>(records, total, pages, page, size);
+        return Result.ok(resp);
     }
 
-    //删除所有已添加题目
-    @RequestMapping("/deleteAllItems")
-    public String deleteAllItems(HttpServletRequest req,
-                                 Model model) {
-        model.addAttribute("username",req.getSession().getAttribute("username"));
-        req.getSession().setAttribute("addedQuestionIds",new ArrayList<>());
-        return "redirect:/teacherAddExam";
-    }
+
 }
