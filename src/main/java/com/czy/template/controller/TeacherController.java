@@ -72,6 +72,7 @@ public class TeacherController {
     }
 
 
+    //修改题目
     @PutMapping("/{qId}/updateQuestion")
     public Result<Void> updateQuestion(@PathVariable Long qId,
                                        @RequestBody @Valid QuestionCreateDTO dto){
@@ -96,27 +97,11 @@ public class TeacherController {
     @GetMapping("/examList")
     public Result<PageRespDTO<PublicExamDTO>> examList(
             @RequestParam(defaultValue = "1") long page,
-            @RequestParam(defaultValue = "7") long size) {
+            @RequestParam(defaultValue = "12") long size,
+            HttpServletRequest request) {
 
-        // 伪数据：实际替换成 MP/JPA 分页
-        List<PublicExamDTO> records = List.of(
-                new PublicExamDTO(142857, "2025 春季期中", List.of(38,40,37,45,36,43,46,39,47), 100, 20),
-                new PublicExamDTO(142858, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142859, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142860, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142861, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142862, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142863, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142864, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142865, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142863, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142864, "2025 春季月考", List.of(36,41), 80, 15),
-                new PublicExamDTO(142865, "2025 春季月考", List.of(36,41), 80, 15)
-        );
-        long total = records.size();                       // 数据库 count
-        long pages = (total + size - 1) / size;
-        PageRespDTO<PublicExamDTO> resp = new PageRespDTO<>(records, total, pages, page, size);
-        return Result.ok(resp);
+
+        return teacherService.examListService(page, size, request);
     }
 
 

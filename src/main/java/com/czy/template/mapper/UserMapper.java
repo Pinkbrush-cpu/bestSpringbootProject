@@ -74,4 +74,12 @@ public interface UserMapper {
     @Update("UPDATE user SET identity = #{identity} WHERE id = #{id}")
     int setAndCancel(User user);
 
+    //查找身份为学生或老师的用户
+    @Select("SELECT id FROM user " +
+            "WHERE identity IN (1,2) " +
+            "AND (#{identity} = 0 OR identity = #{identity})")
+    List<Long> findUserIdsByRole(@Param("identity") int identity);
+
+
+
 }

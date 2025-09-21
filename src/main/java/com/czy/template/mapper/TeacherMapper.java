@@ -1,5 +1,6 @@
 package com.czy.template.mapper;
 
+import com.czy.template.dto.PublicExamDTO;
 import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.Question;
 import com.czy.template.pojo.User;
@@ -56,4 +57,17 @@ public interface TeacherMapper {
 
     @Update("update exam set title = #{title}, status = #{status}, questionIds = #{questionIds}, totalScore = #{totalScore}, totalTitles = #{totalTitles} where exam_id = #{exam_id}")
     boolean updateExamByqId(Exam exam);
+
+    //查看共有多少考试
+    @Select("SELECT COUNT(*) FROM exam " +
+            "WHERE create_id = #{userId} ")
+    long countExamByKeyword(@Param("userId") long userId);
+
+    //分页查询考试
+    @Select("SELECT * FROM exam " +
+            "WHERE create_id = #{userId} " +
+            "LIMIT #{offset}, #{size}")
+    List<Exam> selectExamById(@Param("userId") long userId,
+                                       @Param("offset") long offset,
+                                       @Param("size") long size);
 }
