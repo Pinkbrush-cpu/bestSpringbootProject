@@ -2,8 +2,11 @@ package com.czy.template.controller;
 
 import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
+import com.czy.template.service.TokenBasedOnlineService;
 import com.czy.template.util.JwtUtil;
+import com.czy.template.util.OnlineUserInterceptorUtil;
 import com.czy.template.util.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +24,12 @@ public class LoginController {
     @Autowired
     JwtUtil jwtUtil;
 
+    @Autowired
+    TokenBasedOnlineService tokenOnlineService;
+
     /* -------------------- 登录 -------------------- */
     @PostMapping("/dologin")
-    public Result<Map<String, Object>> loginIn(@RequestBody Map<String, String> loginRequest) {
+    public Result<Map<String, Object>> loginIn(@RequestBody Map<String, String> loginRequest, HttpServletRequest httpRequest) {
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
 
@@ -55,6 +61,15 @@ public class LoginController {
         data.put("redirectUrl", redirectUrl);
         data.put("user", user);
 
+        // 记录用户登录
+        tokenOnlineService.userLogin(
+                user.getId(),
+                user.getUsername(),
+                token,
+                httpRequest.getRemoteAddr(),
+                httpRequest.getHeader("User-Agent")
+        );
+
 
         return Result.ok("登录成功", data);
     }
@@ -74,5 +89,14 @@ public class LoginController {
         User newUser = new User(0, "未填写", username, password, phone, email, '空', "未填写", 1);
         int row = userMapper.registerUser(newUser);
         return row == 1 ? Result.ok() : Result.error("注册失败！");
+    }
+
+    @PostMapping("/logout")
+    public Result<Void> register(HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        System.out.println("退出登录");
+        tokenOnlineService.userLogout(token);
+
+        return Result.ok();
     }
 }

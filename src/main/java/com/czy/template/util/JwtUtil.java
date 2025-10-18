@@ -61,4 +61,30 @@ public class JwtUtil {
     }
 
 
+    /* -------------------- 验证令牌有效性 -------------------- */
+    public boolean validateToken(String token) {
+        try {
+            // 尝试解析令牌，如果解析成功且未过期，则令牌有效
+            Claims claims = parseToken(token);
+
+            // 检查是否过期（parseToken内部已经会检查过期，这里额外确保）
+            return claims.getExpiration().after(new Date());
+        } catch (ExpiredJwtException e) {
+            // 令牌过期
+            System.out.println("JWT令牌已过期: " + e.getMessage());
+            return false;
+        } catch (MalformedJwtException e) {
+            // 令牌格式错误
+            System.out.println("JWT令牌格式错误: " + e.getMessage());
+            return false;
+        } catch (SignatureException e) {
+            // 签名验证失败
+            System.out.println("JWT签名无效: " + e.getMessage());
+            return false;
+        } catch (JwtException | IllegalArgumentException e) {
+            // 其他JWT异常
+            System.out.println("JWT令牌无效: " + e.getMessage());
+            return false;
+        }
+    }
 }
