@@ -1,9 +1,9 @@
 package com.czy.template.service;
 
-import com.czy.template.dto.IdsDTO;
-import com.czy.template.dto.PageRespDTO;
-import com.czy.template.dto.PublicExamDTO;
-import com.czy.template.dto.QuestionCreateDTO;
+import com.czy.template.view.dto.IdsDTO;
+import com.czy.template.view.dto.PageRespDTO;
+import com.czy.template.view.dto.PublicExamDTO;
+import com.czy.template.view.dto.QuestionCreateDTO;
 import com.czy.template.mapper.TeacherMapper;
 import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.Question;

@@ -1,4 +1,4 @@
-package com.czy.template.dto;
+package com.czy.template.view.dto;
 
 import lombok.Data;
 

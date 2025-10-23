@@ -1,9 +1,7 @@
 package com.czy.template.mapper;
 
-import com.czy.template.dto.PublicExamDTO;
 import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.Question;
-import com.czy.template.pojo.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.czy.template.mapper;
 
-import com.czy.template.dto.ModifyInformationDTO;
+import com.czy.template.view.dto.ModifyInformationDTO;
 import com.czy.template.pojo.User;
-import com.czy.template.vo.UserVO;
+import com.czy.template.view.vo.UserVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

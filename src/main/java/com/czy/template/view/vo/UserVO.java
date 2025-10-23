@@ -1,11 +1,10 @@
-package com.czy.template.vo;
+package com.czy.template.view.vo;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-
 public class UserVO implements Serializable {
     private Long id;
     private String username;

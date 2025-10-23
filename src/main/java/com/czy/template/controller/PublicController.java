@@ -1,7 +1,7 @@
 package com.czy.template.controller;
 
-import com.czy.template.dto.ChangePwdDTO;
-import com.czy.template.dto.ModifyInformationDTO;
+import com.czy.template.view.dto.ChangePwdDTO;
+import com.czy.template.view.dto.ModifyInformationDTO;
 import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
 import com.czy.template.util.JwtUtil;

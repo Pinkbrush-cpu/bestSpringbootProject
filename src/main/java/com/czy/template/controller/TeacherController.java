@@ -1,20 +1,17 @@
 package com.czy.template.controller;
 
-import com.czy.template.dto.IdsDTO;
-import com.czy.template.dto.PageRespDTO;
-import com.czy.template.dto.PublicExamDTO;
-import com.czy.template.dto.QuestionCreateDTO;
+import com.czy.template.view.dto.IdsDTO;
+import com.czy.template.view.dto.PageRespDTO;
+import com.czy.template.view.dto.PublicExamDTO;
+import com.czy.template.view.dto.QuestionCreateDTO;
 import com.czy.template.mapper.TeacherMapper;
-import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.Question;
 import com.czy.template.service.TeacherService;
 import com.czy.template.util.JwtUtil;
 import com.czy.template.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
