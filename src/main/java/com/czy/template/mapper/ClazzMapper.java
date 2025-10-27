@@ -34,6 +34,32 @@ public interface ClazzMapper {
                                 @Param("size") int size,
                                 @Param("keyword") String keyword);
 
+    // 查询教师对应班级
+    @Select({
+            "<script>",
+            "SELECT class_id, class_name, class_code, teacher_id, ",
+            "       admission_year,student_max_count, class_state ",
+            "FROM clazz ",
+            "<where>",
+            "   teacher_id = #{teacherId}",
+            "   <if test='keyword != null and keyword != \"\"'>",
+            "       AND (",
+            "             class_name LIKE CONCAT('%', #{keyword}, '%') ",
+            "          OR class_code LIKE CONCAT('%', #{keyword}, '%') ",
+            "          OR admission_year LIKE CONCAT('%', #{keyword}, '%') ",
+            "          OR class_state LIKE CONCAT('%', #{keyword}, '%') ",
+            "       )",
+            "   </if>",
+            "</where>",
+            "ORDER BY admission_year DESC, class_code ",
+            "LIMIT #{offset}, #{size}",
+            "</script>"
+    })
+    List<Clazz> selectClazzPageByTeacherId(@Param("offset") long offset,
+                                           @Param("size") int size,
+                                           @Param("keyword") String keyword,
+                                           @Param("teacherId") Long teacherId);
+
     //批量教师
     @Select({"SELECT realname FROM user WHERE identity = 2 AND id = #{tId} ",})
     String selectTeachers(@Param("tId") Long tId);
@@ -69,4 +95,11 @@ public interface ClazzMapper {
             "admission_year=#{admissionYear},student_max_count=#{studentMaxCount},class_state=#{classState} " +
             "WHERE class_id=#{classId}")
     int updateClazz(Clazz cla);
+
+    //删除班级
+    @Delete("delete from clazz where class_id = #{classId}")
+    int deleteClazz(Long clazzId);
+
+
+
 }

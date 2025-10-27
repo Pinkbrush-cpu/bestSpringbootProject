@@ -8,8 +8,11 @@ import com.czy.template.pojo.User;
 import com.czy.template.service.ClazzService;
 import com.czy.template.util.Result;
 import com.czy.template.view.vo.ClazzVO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,7 @@ public class ClassController {
     @Autowired
     ClazzMapper clazzMapper;
 
+    //管理员创建班级Controller
     @PostMapping("/addClazz")
     public Result<Void> addClazz(@RequestBody Clazz cls){
 
@@ -34,8 +38,6 @@ public class ClassController {
 
     @PutMapping("/updateClazz/{classId}")
     public Result<Void> updateClazz(@RequestBody Clazz cls){
-
-        System.out.println(2345);
         if(clazzMapper.updateClazz(cls) == 1)
             return Result.ok();
         return Result.error("修改失败");
@@ -52,7 +54,6 @@ public class ClassController {
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "10")  Integer size,
                             @RequestParam(required = false)    String keyword) {
-        System.out.println(size);
         return Result.ok(clazzService.getClazzVOPage(page, size, keyword));
     }
 
@@ -61,5 +62,23 @@ public class ClassController {
     public Result<List<Map<String,String>>> getTeacherByName(@RequestParam String name) {
         List<Map<String,String>> list = clazzMapper.selectTeacherByName(name);
         return Result.ok(list);
+    }
+
+    @DeleteMapping("/deleteClazz/{classId}")
+    public Result<Void> deleteClazz(@PathVariable Long classId){
+        if(clazzMapper.deleteClazz(classId) == 1)
+            return Result.ok();
+        return Result.error("删除班级失败，请稍后再试！");
+    }
+
+    //教师端查看班级
+    @GetMapping("/viewClass")
+    public Result<PageRespDTO<ClazzVO>> viewClass(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String keyword,
+            HttpServletRequest req) {
+
+        return Result.ok(clazzService.viewClass(page, size, keyword,req));
     }
 }

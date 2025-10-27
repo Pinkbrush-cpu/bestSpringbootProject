@@ -25,7 +25,7 @@ public interface UserMapper {
 
     //修改密码
     @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
-    int changePassword(@Param("password") String newPassword, int id);
+    int changePassword(@Param("password") String newPassword, Long id);
 
     //总条数
     @Select({"<script>",

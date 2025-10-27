@@ -42,7 +42,7 @@ public class TeacherService {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
-        int teacherId = jwtUtil.getUserFromRequest(request).getId();
+        Long teacherId = jwtUtil.getUserFromRequest(request).getId();
         q.setCreateId(teacherId);
 
         // ✅ 对题目标题进行处理：每 40 宽度换行（中文算1，英文算0.5）
@@ -195,7 +195,7 @@ public class TeacherService {
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
         //使用jwtUtil方法拿到id
-        int teacherId = jwtUtil.getUserFromRequest(request).getId();
+        Long teacherId = jwtUtil.getUserFromRequest(request).getId();
         exam.setCreate_id(teacherId);
         exam.setStatus("已发布");
         try {

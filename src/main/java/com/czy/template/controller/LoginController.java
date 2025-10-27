@@ -4,13 +4,11 @@ import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
 import com.czy.template.service.TokenBasedOnlineService;
 import com.czy.template.util.JwtUtil;
-import com.czy.template.util.OnlineUserInterceptorUtil;
 import com.czy.template.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +84,7 @@ public class LoginController {
             return Result.error("用户名重复！");
         }
 
-        User newUser = new User(0, "未填写", username, password, phone, email, '空', "未填写", 1);
+        User newUser = new User(0L, "未填写", username, password, phone, email, '空', "未填写", 1);
         int row = userMapper.registerUser(newUser);
         return row == 1 ? Result.ok() : Result.error("注册失败！");
     }

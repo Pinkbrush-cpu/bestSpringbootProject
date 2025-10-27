@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Question {
     @JsonProperty("qId")
     private int qId;              //题目编号
-    private int createId;         //创建教师编号
+    private Long createId;         //创建教师编号
     private String type;           //题目类型
     private String title;          //题目问题
     private String options;        //题目选项
@@ -13,7 +13,7 @@ public class Question {
     private String answer;         //答案
     private int score;             //分数
 
-    public Question(int qId, int createId, String type, String title, String options, String answerText, String answer, int score) {
+    public Question(int qId, Long createId, String type, String title, String options, String answerText, String answer, int score) {
         this.qId = qId;
         this.createId = createId;
         this.type = type;
@@ -35,11 +35,11 @@ public class Question {
         this.qId = qId;
     }
 
-    public int getCreateId() {
+    public Long getCreateId() {
         return createId;
     }
 
-    public void setCreateId(int createId) {
+    public void setCreateId(Long createId) {
         this.createId = createId;
     }
 
