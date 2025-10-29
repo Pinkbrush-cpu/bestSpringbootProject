@@ -43,7 +43,7 @@ public class ClassController {
 
     @PutMapping("/showTeacher")
     public Result<List<User>> showTeacher(){
-        List list = new ArrayList<User>();
+        List<User> list = new ArrayList<>();
         return Result.ok(list);
     }
 

@@ -1,7 +1,6 @@
 package com.czy.template.mapper;
 
 import com.czy.template.pojo.Clazz;
-import com.czy.template.view.vo.ClazzVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
