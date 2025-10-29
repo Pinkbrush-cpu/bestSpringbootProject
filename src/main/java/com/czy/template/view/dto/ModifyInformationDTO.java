@@ -1,4 +1,5 @@
 package com.czy.template.view.dto;
+
 @lombok.Data
 public class ModifyInformationDTO {
     private String username;

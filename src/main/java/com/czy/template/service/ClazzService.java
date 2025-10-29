@@ -46,7 +46,7 @@ public class  ClazzService {
             return v;
         }).collect(Collectors.toList());
 
-        int total = clazzMapper.countClazz(keyword);
+        int total = clazzMapper.countClazz(null,keyword);
 
         return PageRespDTO.<ClazzVO>builder()
                 .list(voList)
@@ -82,7 +82,7 @@ public class  ClazzService {
             return v;
         }).collect(Collectors.toList());
 
-        int total = clazzList.size();
+        int total = clazzMapper.countClazz(teacherId,keyword);
 
         return PageRespDTO.<ClazzVO>builder()
                 .list(voList)

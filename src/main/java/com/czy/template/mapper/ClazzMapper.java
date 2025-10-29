@@ -72,12 +72,15 @@ public interface ClazzMapper {
     @Select({"<script>",
             "SELECT COUNT(*) FROM clazz ",
             "<where>",
+            "  <if test='teacherId != null'>",
+            "    teacher_id = #{teacherId}",
+            "  </if>",
             "  <if test='keyword != null and keyword != \"\"'>",
             "    AND class_name LIKE CONCAT('%', #{keyword}, '%')",
             "  </if>",
             "</where>",
             "</script>"})
-    int countClazz(@Param("keyword") String keyword);
+    int countClazz(@Param("teacherId") Long teacherId,@Param("keyword") String keyword);
 
     @Select({"SELECT id,realname,phone FROM user WHERE identity = 2 AND realname LIKE CONCAT('%', #{name}, '%') ORDER BY id ASC"})
     List<Map<String,String>> selectTeacherByName(@Param("name") String name);
@@ -99,7 +102,5 @@ public interface ClazzMapper {
     //删除班级
     @Delete("delete from clazz where class_id = #{classId}")
     int deleteClazz(Long clazzId);
-
-
 
 }
