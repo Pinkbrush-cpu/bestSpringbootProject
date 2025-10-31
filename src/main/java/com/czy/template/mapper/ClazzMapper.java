@@ -59,6 +59,10 @@ public interface ClazzMapper {
                                            @Param("keyword") String keyword,
                                            @Param("teacherId") Long teacherId);
 
+    //根据clazzId查询Clazz
+    @Select("SELECT * FROM clazz WHERE class_id = #{classId}")
+    Clazz selectClazzById(@Param("classId")Long classId);
+
     //批量教师
     @Select({"SELECT realname FROM user WHERE identity = 2 AND id = #{tId} ",})
     String selectTeachers(@Param("tId") Long tId);
@@ -102,4 +106,13 @@ public interface ClazzMapper {
     @Delete("delete from clazz where class_id = #{classId}")
     int deleteClazz(Long clazzId);
 
+    //根据教师id查看姓名
+    @Select("SELECT realname FROM user WHERE id = #{id}")
+    String selectTeacherName(Long id);
+
+    @Select("SELECT clazz_id FROM clazz_student WHERE student_id = #{id} LIMIT #{offset}, #{size}")
+    List<Long> selectByStudentId(@Param("offset") long offset,
+                                 @Param("size") int size,
+                                 @Param("keyword") String keyword,
+                                 @Param("id") Long id);
 }

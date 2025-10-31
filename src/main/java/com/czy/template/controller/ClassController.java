@@ -79,4 +79,15 @@ public class ClassController {
 
         return Result.ok(clazzService.viewClass(page, size, keyword,req));
     }
+
+    //学生端查看班级
+    @GetMapping("/student/viewClass")
+    public Result<PageRespDTO<ClazzVO>> studentViewClass(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String keyword,
+            HttpServletRequest req) {
+
+        return Result.ok(clazzService.studentViewClass(page, size, keyword,req));
+    }
 }
