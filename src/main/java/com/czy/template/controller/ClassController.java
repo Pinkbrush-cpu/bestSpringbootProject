@@ -29,6 +29,9 @@ public class ClassController {
     @PostMapping("/addClazz")
     public Result<Void> addClazz(@RequestBody Clazz cls){
 
+        if (clazzMapper.selectClazzByClassCode(cls.getClassCode()) != null)
+            return Result.error("班级码重复");
+
         if(clazzMapper.addClazz(cls) == 1)
             return Result.ok();
         return Result.error("新增失败");

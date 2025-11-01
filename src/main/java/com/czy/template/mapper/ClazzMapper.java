@@ -67,6 +67,10 @@ public interface ClazzMapper {
     @Select({"SELECT realname FROM user WHERE identity = 2 AND id = #{tId} ",})
     String selectTeachers(@Param("tId") Long tId);
 
+    //查询是否有相同班级码
+    @Select("SELECT * FROM clazz WHERE class_code = #{classCode}")
+    Clazz selectClazzByClassCode(@Param("classCode") String classCode);
+
     // 学生数
     @Select({"SELECT COUNT(*) FROM clazz_student WHERE clazz_id = #{clazzId}  "})
     int selectStuCount(@Param("clazzId") int clazzId);
