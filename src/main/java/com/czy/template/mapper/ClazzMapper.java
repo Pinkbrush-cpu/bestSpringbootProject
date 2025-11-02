@@ -1,6 +1,7 @@
 package com.czy.template.mapper;
 
 import com.czy.template.pojo.Clazz;
+import com.czy.template.pojo.ClazzStudent;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -119,4 +120,7 @@ public interface ClazzMapper {
                                  @Param("size") int size,
                                  @Param("keyword") String keyword,
                                  @Param("id") Long id);
+
+    @Insert("INSERT INTO clazz_student (student_id, clazz_id, student_code, state) VALUES (#{studentId}, #{clazzId}, #{studentCode}, #{state})")
+    int insertStudent(ClazzStudent clazzStudent);
 }

@@ -45,7 +45,6 @@ public class TeacherService {
         Long teacherId = jwtUtil.getUserFromRequest(request).getId();
         q.setCreateId(teacherId);
 
-        // ✅ 对题目标题进行处理：每 40 宽度换行（中文算1，英文算0.5）
         if (dto.getTitle() != null) {
             q.setTitle(wrapMixedText(dto.getTitle(), 40));
         }
@@ -58,12 +57,7 @@ public class TeacherService {
         return teacherMapper.createQuestion(q) == 1;
     }
 
-    /**
-     * 按宽度自动换行：
-     * - 中文/全角符号算 1 宽度
-     * - 英文/数字/半角符号算 0.5 宽度
-     * - 每行达到 lineWidth 时，若该行没有换行符，则自动加 \n
-     */
+
     private String wrapMixedText(String text, double lineWidth) {
         if (text == null || text.isEmpty()) return text;
 

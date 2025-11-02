@@ -1,6 +1,8 @@
 package com.czy.template.service;
 
+import com.czy.template.pojo.ClazzStudent;
 import com.czy.template.util.JwtUtil;
+import com.czy.template.util.Result;
 import com.czy.template.view.dto.PageRespDTO;
 import com.czy.template.mapper.ClazzMapper;
 import com.czy.template.pojo.Clazz;
@@ -134,4 +136,22 @@ public class  ClazzService {
                 .size(size)
                 .build();
     }
+
+    public Result<Void> joinClass(String classCode, HttpServletRequest req) {
+        Clazz clazz = clazzMapper.selectClazzByClassCode(classCode);
+        if(clazz == null){
+           return Result.error("班级不存在");
+        }
+        ClazzStudent clazzStudent = new ClazzStudent();
+        clazzStudent.setClazzId(clazz.getClassId());
+        clazzStudent.setStudentId(jwtUtil.getUserFromRequest(req).getId());
+        clazzStudent.setStudentCode(classCode);
+        clazzStudent.setState(0);
+
+        if(clazzMapper.insertStudent(clazzStudent) > 0){
+            return Result.ok("加入班级成功",null);
+        }
+        return Result.error("加入班级失败，请稍后再试！");
+    }
+
 }

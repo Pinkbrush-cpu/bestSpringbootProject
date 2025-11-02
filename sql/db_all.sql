@@ -55,6 +55,8 @@ CREATE TABLE `clazz_student` (
   `cla_stu_id` int NOT NULL AUTO_INCREMENT,
   `student_id` int NOT NULL,
   `clazz_id` int NOT NULL,
+  `student_code` varchar(50) not null,
+  `state` int not null ,
   PRIMARY KEY (`cla_stu_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

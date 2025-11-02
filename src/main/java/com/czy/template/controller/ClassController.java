@@ -93,4 +93,10 @@ public class ClassController {
 
         return Result.ok(clazzService.studentViewClass(page, size, keyword,req));
     }
+
+    @PostMapping("/student/joinClass")
+    public Result<Void> joinClass(@RequestBody Clazz clazz, HttpServletRequest req) {
+
+        return clazzService.joinClass(clazz.getClassCode(),req);
+    }
 }
