@@ -44,7 +44,7 @@ public interface UserMapper {
 
     //当前页数据
     @Select({"<script>",
-            "SELECT id,username,email,phone,identity FROM user",
+            "SELECT id,username,realname,email,phone,identity FROM `user`",
             "<where>",
             "  <if test='onlyOne'> id > 1 </if>",
             "  <if test='keyword != null and keyword != \"\"'>",

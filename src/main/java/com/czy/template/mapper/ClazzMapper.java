@@ -2,6 +2,7 @@ package com.czy.template.mapper;
 
 import com.czy.template.pojo.Clazz;
 import com.czy.template.pojo.ClazzStudent;
+import com.czy.template.view.vo.UserVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public interface ClazzMapper {
     Clazz selectClazzByClassCode(@Param("classCode") String classCode);
 
     // 学生数
-    @Select({"SELECT COUNT(*) FROM clazz_student WHERE clazz_id = #{clazzId}  "})
+    @Select({"SELECT COUNT(*) FROM clazz_student WHERE clazz_id = #{clazzId} AND state = 1  "})
     int selectStuCount(@Param("clazzId") int clazzId);
 
     //总条数
@@ -115,7 +116,7 @@ public interface ClazzMapper {
     @Select("SELECT realname FROM user WHERE id = #{id}")
     String selectTeacherName(Long id);
 
-    @Select("SELECT clazz_id FROM clazz_student WHERE student_id = #{id} LIMIT #{offset}, #{size}")
+    @Select("SELECT clazz_id FROM clazz_student WHERE student_id = #{id} AND state = 1 LIMIT #{offset}, #{size}")
     List<Long> selectByStudentId(@Param("offset") long offset,
                                  @Param("size") int size,
                                  @Param("keyword") String keyword,
@@ -123,4 +124,14 @@ public interface ClazzMapper {
 
     @Insert("INSERT INTO clazz_student (student_id, clazz_id, student_code, state) VALUES (#{studentId}, #{clazzId}, #{studentCode}, #{state})")
     int insertStudent(ClazzStudent clazzStudent);
+
+    @Select("SELECT count(*) FROM clazz_student WHERE clazz_id = #{clazzId} AND student_id = #{studentId}")
+    int selectClassStudent(@Param("clazzId") Long clazzId, @Param("studentId") Long studentId);
+
+    //查询班级里需要审核的学生
+    @Select("SELECT id,username,realname,phone,email,`identity` FROM user WHERE id = #{id}")
+    UserVO selectClazzStudent(@Param("id") Long id);
+
+    @Select("SELECT student_id FROM clazz_student WHERE clazz_id = #{clazzId}")
+    List<Long> selectClazzStudentId(@Param("clazzId") Long clazzId);
 }

@@ -1,6 +1,8 @@
 package com.czy.template.view.dto;
 
-@lombok.Data
+import lombok.Data;
+
+@Data
 public class ModifyInformationDTO {
     private String username;
     private String realname;

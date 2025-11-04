@@ -1,7 +1,7 @@
 package com.czy.template.controller;
 
 import com.czy.template.view.dto.ModifyInformationDTO;
-import com.czy.template.view.dto.PageRespDTO;
+import com.czy.template.view.vo.PageRespVO;
 import com.czy.template.mapper.UserMapper;
 import com.czy.template.pojo.User;
 import com.czy.template.service.ManagerService;
@@ -25,36 +25,30 @@ public class ManagerController {
     UserMapper userMapper;
 
     @Autowired
-    ManagerService managerService;
-
-    @Autowired
     JwtUtil jwtUtil;
 
     //分页返回用户
     @GetMapping("/managerAllUser")
-    public Result<PageRespDTO<UserVO>> managerAllUser(
+    public Result<PageRespVO<UserVO>> managerAllUser(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "8")  Integer size,
             @RequestParam(required = false)    String keyword,
             HttpServletRequest request) {
 
-        /* ① 当前登录用户 */
         long currentId = jwtUtil.getUserFromRequest(request).getId();
         boolean hideOne = currentId != 1;
 
-        /* ② 分页查询（已过滤 id=1） */
         long offset = (long) (page - 1) * size;
         long total  = userMapper.countByKeyword(keyword, hideOne);
         List<UserVO> records = userMapper.selectPageByKeyword(offset, size, keyword, hideOne);
 
-        /* ③ 身份排序（管理员>教师>学生） */
         List<Integer> order = List.of(10, 2, 1);
         records.sort(Comparator
                 .comparingInt((UserVO u) -> order.indexOf(u.getIdentity()))
                 .thenComparing(UserVO::getId));
 
         long pages = (total + size - 1) / size;
-        return Result.ok(new PageRespDTO<>(records, total, page, size, pages));
+        return Result.ok(new PageRespVO<>(records, total, page, size, pages));
     }
 
     @GetMapping("/{userId}/profile")

@@ -1,4 +1,4 @@
-package com.czy.template.view.dto;
+package com.czy.template.view.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PageRespDTO<T> {
+public class PageRespVO<T> {
     private List<T> list;    // 当前页数据
     private long    total;   // 总条数
     private long    pages;   // 总页数

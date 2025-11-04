@@ -8,7 +8,8 @@ import java.io.Serializable;
 public class UserVO implements Serializable {
     private Long id;
     private String username;
-    private String email;
+    private String realname;
     private String phone;
+    private String email;
     private Integer identity;
 }

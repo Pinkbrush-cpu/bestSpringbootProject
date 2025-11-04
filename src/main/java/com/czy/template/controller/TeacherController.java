@@ -1,7 +1,7 @@
 package com.czy.template.controller;
 
 import com.czy.template.view.dto.IdsDTO;
-import com.czy.template.view.dto.PageRespDTO;
+import com.czy.template.view.vo.PageRespVO;
 import com.czy.template.view.dto.PublicExamDTO;
 import com.czy.template.view.dto.QuestionCreateDTO;
 import com.czy.template.mapper.TeacherMapper;
@@ -22,13 +22,7 @@ import java.util.*;
 public class TeacherController {
 
     @Autowired
-    TeacherMapper teacherMapper;
-
-    @Autowired
     TeacherService teacherService;
-
-    @Autowired
-    JwtUtil jwtUtil;
 
     @PostMapping("/createQuestion")
     public Result<String> createQuestion(@Validated @RequestBody QuestionCreateDTO dto) {
@@ -42,7 +36,7 @@ public class TeacherController {
 
     //所有题目
     @GetMapping("/teacherViewTopic")
-    public Result<PageRespDTO<Question>> teacherAllTopic(@RequestParam Map<String, Object> param,
+    public Result<PageRespVO<Question>> teacherAllTopic(@RequestParam Map<String, Object> param,
                                                          HttpServletRequest request) {
         // ① 把分页缺省值写进 Map（仅当请求未传时）
         param.putIfAbsent("page", 1);
@@ -92,7 +86,7 @@ public class TeacherController {
 
     //返回所有考试
     @GetMapping("/examList")
-    public Result<PageRespDTO<PublicExamDTO>> examList(
+    public Result<PageRespVO<PublicExamDTO>> examList(
             @RequestParam(defaultValue = "1") long page,
             @RequestParam(defaultValue = "12") long size,
             HttpServletRequest request) {

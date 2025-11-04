@@ -1,7 +1,7 @@
 package com.czy.template.service;
 
 import com.czy.template.view.dto.IdsDTO;
-import com.czy.template.view.dto.PageRespDTO;
+import com.czy.template.view.vo.PageRespVO;
 import com.czy.template.view.dto.PublicExamDTO;
 import com.czy.template.view.dto.QuestionCreateDTO;
 import com.czy.template.mapper.TeacherMapper;
@@ -110,7 +110,7 @@ public class TeacherService {
     }
 
 
-    public Result<PageRespDTO<Question>> listTeacherQuestion(Map<String, Object> param, HttpServletRequest request) {
+    public Result<PageRespVO<Question>> listTeacherQuestion(Map<String, Object> param, HttpServletRequest request) {
         /* 1. 解析用户 */
         long userId = jwtUtil.getUserFromRequest(request).getId();
 
@@ -136,7 +136,7 @@ public class TeacherService {
 
         /* 6. 封装分页 */
         long pages = (total + size - 1) / size;
-        PageRespDTO<Question> dto = new PageRespDTO<>(list, total, page, pages, size);
+        PageRespVO<Question> dto = new PageRespVO<>(list, total, page, pages, size);
 
         return Result.ok(dto);
     }
@@ -206,7 +206,7 @@ public class TeacherService {
     }
 
     //分页返回发布的考试
-    public Result<PageRespDTO<PublicExamDTO>> examListService(long page,long size, HttpServletRequest request){
+    public Result<PageRespVO<PublicExamDTO>> examListService(long page,long size, HttpServletRequest request){
         long userId = jwtUtil.getUserFromRequest(request).getId();
         long offset =(page - 1) * size;
 
@@ -241,7 +241,7 @@ public class TeacherService {
 
         long total = records.size();
         long pages = (total + size - 1) / size;
-        PageRespDTO<PublicExamDTO> resp = new PageRespDTO<>(records, total, pages, page, size);
+        PageRespVO<PublicExamDTO> resp = new PageRespVO<>(records, total, pages, page, size);
         return Result.ok(resp);
     }
 
