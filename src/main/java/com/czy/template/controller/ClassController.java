@@ -1,6 +1,7 @@
 package com.czy.template.controller;
 
 import com.czy.template.mapper.ClazzMapper;
+import com.czy.template.view.dto.ApproveDTO;
 import com.czy.template.view.vo.PageRespVO;
 import com.czy.template.pojo.Clazz;
 import com.czy.template.pojo.User;
@@ -104,12 +105,11 @@ public class ClassController {
 
     @GetMapping("manageClass/{classId}")
     public Result<List<UserVO>> manageClass(@PathVariable Long classId) {
-        System.out.println(classId);
         return clazzService.manageClass(classId);
     }
 
     @PostMapping("/approve/{action}")
-    public Result<Void> approveClass(@PathVariable Long action, HttpServletRequest req) {
-        return Result.ok();
+    public Result<Void> approveClass(@PathVariable int action, @RequestBody ApproveDTO dto, HttpServletRequest req) {
+        return clazzService.approveClass(action,dto.getClassId(),dto.getStudentId());
     }
 }

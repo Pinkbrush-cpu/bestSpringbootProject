@@ -132,6 +132,12 @@ public interface ClazzMapper {
     @Select("SELECT id,username,realname,phone,email,`identity` FROM user WHERE id = #{id}")
     UserVO selectClazzStudent(@Param("id") Long id);
 
-    @Select("SELECT student_id FROM clazz_student WHERE clazz_id = #{clazzId}")
+    @Select("SELECT student_id FROM clazz_student WHERE state = 0 AND clazz_id = #{clazzId} ")
     List<Long> selectClazzStudentId(@Param("clazzId") Long clazzId);
+
+    @Update("UPDATE clazz_student SET state=1 WHERE clazz_id=#{clazzId} AND student_id = #{studentId}")
+    boolean updateClazzStudent(Long clazzId, Long studentId);
+
+    @Delete("delete from clazz_student where clazz_id = #{clazzId} AND student_id = #{studentId}")
+    boolean deleteClazzStudent(Long clazzId, Long studentId);
 }

@@ -49,7 +49,7 @@ public class  ClazzService {
             return v;
         }).collect(Collectors.toList());
 
-        int total = clazzMapper.countClazz(null,keyword);
+        int total = clazzMapper.countClazz(null, keyword);
 
         return PageRespVO.<ClazzVO>builder()
                 .list(voList)
@@ -65,7 +65,7 @@ public class  ClazzService {
         Long teacherId = jwtUtil.getUserFromRequest(req).getId();
 
         int offset = (page - 1) * size;
-        List<Clazz> clazzList = clazzMapper.selectClazzPageByTeacherId(offset, size, keyword,teacherId);
+        List<Clazz> clazzList = clazzMapper.selectClazzPageByTeacherId(offset, size, keyword, teacherId);
 
 
         List<ClazzVO> voList = clazzList.stream().map(c -> {
@@ -85,7 +85,7 @@ public class  ClazzService {
             return v;
         }).collect(Collectors.toList());
 
-        int total = clazzMapper.countClazz(teacherId,keyword);
+        int total = clazzMapper.countClazz(teacherId, keyword);
 
         return PageRespVO.<ClazzVO>builder()
                 .list(voList)
@@ -101,7 +101,7 @@ public class  ClazzService {
         Long studentId = jwtUtil.getUserFromRequest(req).getId();
 
         int offset = (page - 1) * size;
-        List<Long> clazzIds = clazzMapper.selectByStudentId(offset, size, keyword,studentId);
+        List<Long> clazzIds = clazzMapper.selectByStudentId(offset, size, keyword, studentId);
 
         List<Clazz> clazzList = new ArrayList<>();
         for (Long clazzId : clazzIds) {
@@ -127,7 +127,7 @@ public class  ClazzService {
             return v;
         }).collect(Collectors.toList());
 
-        int total = clazzMapper.countClazz(studentId,keyword);
+        int total = clazzMapper.countClazz(studentId, keyword);
 
         return PageRespVO.<ClazzVO>builder()
                 .list(voList)
@@ -141,13 +141,13 @@ public class  ClazzService {
     //学生端加入班级
     public Result<Void> joinClass(String classCode, HttpServletRequest req) {
         Clazz clazz = clazzMapper.selectClazzByClassCode(classCode);
-        if(clazz == null){
-           return Result.error("班级不存在");
+        if (clazz == null) {
+            return Result.error("班级不存在");
         }
 
         Long studentId = jwtUtil.getUserFromRequest(req).getId();
         int clazzStudent1 = clazzMapper.selectClassStudent(clazz.getClassId(), studentId);
-        if(clazzStudent1 != 0){
+        if (clazzStudent1 != 0) {
             return Result.error("已经申请进入班级！");
         }
 
@@ -157,8 +157,8 @@ public class  ClazzService {
         clazzStudent.setStudentCode(classCode);
         clazzStudent.setState(0);
 
-        if(clazzMapper.insertStudent(clazzStudent) > 0){
-            return Result.ok("加入班级成功",null);
+        if (clazzMapper.insertStudent(clazzStudent) > 0) {
+            return Result.ok("加入班级成功", null);
         }
         return Result.error("加入班级失败，请稍后再试！");
     }
@@ -167,7 +167,7 @@ public class  ClazzService {
         ArrayList<UserVO> userVOS = new ArrayList<>();
         List<Long> studentIds = clazzMapper.selectClazzStudentId(classId);
 
-        if(studentIds == null || studentIds.size() == 0){
+        if (studentIds == null || studentIds.size() == 0) {
             return Result.error("");
         }
 
@@ -178,10 +178,22 @@ public class  ClazzService {
             }
         }
 
-        if(userVOS == null || userVOS.size() == 0){
+        if (userVOS == null || userVOS.size() == 0) {
             return Result.error("");
         }
 
         return Result.ok(userVOS);
+    }
+
+    public Result<Void> approveClass(int action,Long clazzId, Long studentId) {
+        if(action == 1){
+            if (clazzMapper.updateClazzStudent(clazzId,studentId))
+                return Result.ok();
+        }
+        else {
+            if (clazzMapper.deleteClazzStudent(clazzId, studentId))
+                return Result.ok();
+        }
+        return Result.error("请求错误，请稍后重试！");
     }
 }
