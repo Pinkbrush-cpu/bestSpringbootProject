@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -182,9 +179,11 @@ public class TeacherService {
 
     }
 
+    //发布考试
     public Boolean publishExamService(PublicExamDTO dto){
         Exam exam = new Exam();
         BeanUtils.copyProperties(dto, exam);
+        exam.setExam_uuid(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
@@ -194,8 +193,6 @@ public class TeacherService {
         exam.setStatus("已发布");
         try {
             exam.setQuestionIds(new ObjectMapper().writeValueAsString(dto.getQuestionIds()));
-            String questionIdsJson = new ObjectMapper().writeValueAsString(dto.getQuestionIds());
-            System.out.println("写入数据库的 questionIds: " + questionIdsJson);
         } catch (Exception e) {
             throw new RuntimeException("选项序列化失败", e);
         }
