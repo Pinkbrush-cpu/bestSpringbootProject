@@ -14,8 +14,8 @@ public interface TeacherMapper {
     int createQuestion(Question question);
 
     //根据题目id搜索题目
-    @Select("SELECT * FROM question where q_id = #{q_id}")
-    Question selectQuestion(long q_id);
+    @Select("SELECT * FROM question where question_id = #{questionId}")
+    Question selectQuestion(long questionId);
 
     //根据教师id搜索所有创建的题目
     @Select("SELECT * FROM question where create_id = #{create_id}")
@@ -43,14 +43,14 @@ public interface TeacherMapper {
                                 @Param("keyword") String keyword);
 
     //根据传入的id数组删除题目
-    @Delete("delete from question where q_id = #{qId}")
-    int deleteQuestionById(@Param("qId") long qId);
+    @Delete("delete from question where question_id = #{questionId}")
+    int deleteQuestionById(@Param("questionId") long questionId);
 
     //根据qId更新题目
-    @Update("update question set title = #{title}, options = #{options}, answer_text = #{answerText}, answer = #{answer}, score = #{score} where q_id = #{qId}")
+    @Update("update question set title = #{title}, options = #{options}, answer_text = #{answerText}, answer = #{answer}, score = #{score} where question_id = #{questionId}")
     boolean updateQuestionByqId(Question question);
 
-    @Insert("INSERT INTO exam(create_id,title,status,questionIds,totalScore,totalTitles) VALUES (#{create_id},#{title},#{status},#{questionIds},#{totalScore},#{totalTitles})")
+    @Insert("INSERT INTO exam(create_id,title,status,questionIds,totalScore,totalTitles,exam_uuid) VALUES (#{create_id},#{title},#{status},#{questionIds},#{totalScore},#{totalTitles},#{examUuid})")
     int publishExam(Exam exam);
 
     @Update("update exam set title = #{title}, status = #{status}, questionIds = #{questionIds}, totalScore = #{totalScore}, totalTitles = #{totalTitles} where exam_id = #{exam_id}")

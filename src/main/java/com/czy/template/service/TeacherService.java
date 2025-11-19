@@ -141,8 +141,8 @@ public class TeacherService {
     //删除题目实现
     public Boolean listDeleteQuestion(IdsDTO ids) {
         int i = 0;
-        for(long qId : ids.getIds()){
-            teacherMapper.deleteQuestionById(qId);
+        for(long questionId : ids.getIds()){
+            teacherMapper.deleteQuestionById(questionId);
             i++;
         }
         if(i == ids.getIds().size()){
@@ -154,9 +154,9 @@ public class TeacherService {
     public Result<List<Question>> selectQuestion(IdsDTO ids) {
         int i = 0;
         List<Question> data = new ArrayList<>();
-        for(Long qId : ids.getIds()){
-            if (qId == null) continue;
-            data.add(teacherMapper.selectQuestion(qId));
+        for(Long questionId : ids.getIds()){
+            if (questionId == null) continue;
+            data.add(teacherMapper.selectQuestion(questionId));
             i++;
         }
         if(i == ids.getIds().size()){
@@ -168,7 +168,7 @@ public class TeacherService {
     public Boolean updateQuestionService(QuestionCreateDTO dto,long qId){
         Question q = new Question();
         BeanUtils.copyProperties(dto, q);
-        q.setqId((int)qId);
+        q.setQuestionId((int)qId);
         try {
             q.setOptions(new ObjectMapper().writeValueAsString(dto.getOptions()));
         } catch (JsonProcessingException e) {
@@ -183,7 +183,7 @@ public class TeacherService {
     public Boolean publishExamService(PublicExamDTO dto){
         Exam exam = new Exam();
         BeanUtils.copyProperties(dto, exam);
-        exam.setExam_uuid(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
+        exam.setExamUuid(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();

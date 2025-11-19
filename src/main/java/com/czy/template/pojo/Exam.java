@@ -13,6 +13,5 @@ public class Exam {
     private String questionIds;           //考试题目
     private int totalScore;               //总分数
     private int totalTitles;              //总题目数
-    private String exam_uuid;             //考试编号，教师可以通过编号来发布考试
-
+    private String examUuid;             //考试编号，教师可以通过编号来发布考试
 }
