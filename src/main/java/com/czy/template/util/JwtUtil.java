@@ -15,10 +15,10 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 24h
+    private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 24小时
 
     @Autowired
-    private UserMapper userMapper;   // 用于查库得到完整 User
+    private UserMapper userMapper;
 
     /* -------------------- 生成令牌 -------------------- */
     public String generateToken(String username, int identity) {
@@ -32,11 +32,18 @@ public class JwtUtil {
     }
 
     /* -------------------- 解析令牌 -------------------- */
-    public Claims parseToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+    public Claims parseToken(String token) throws ExpiredJwtException {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            // 直接抛出，让过滤器处理
+            throw e;
+        } catch (Exception e) {
+            throw new MalformedJwtException("Token格式错误");
+        }
     }
 
     /* -------------------- 从请求头拿 token -------------------- */
@@ -48,43 +55,38 @@ public class JwtUtil {
         return null;
     }
 
+    /* -------------------- 验证令牌有效性 -------------------- */
+    public boolean validateToken(String token) throws ExpiredJwtException {
+        try {
+            Claims claims = parseToken(token);
+            return claims.getExpiration().after(new Date());
+        } catch (ExpiredJwtException e) {
+            // 直接抛出过期异常
+            throw e;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /* -------------------- 从请求头直接拿用户名 -------------------- */
     public String getUsernameFromRequest(HttpServletRequest request) {
         String token = resolveToken(request);
-        return token == null ? null : parseToken(token).getSubject();
+        if (token == null) return null;
+
+        try {
+            Claims claims = parseToken(token);
+            return claims.getSubject();
+        } catch (ExpiredJwtException e) {
+            // 即使过期也返回用户名
+            return e.getClaims().getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /* -------------------- 从请求头直接拿完整 User -------------------- */
     public User getUserFromRequest(HttpServletRequest request) {
         String username = getUsernameFromRequest(request);
         return username == null ? null : userMapper.findByUsername(username);
-    }
-
-
-    /* -------------------- 验证令牌有效性 -------------------- */
-    public boolean validateToken(String token) {
-        try {
-            // 尝试解析令牌，如果解析成功且未过期，则令牌有效
-            Claims claims = parseToken(token);
-
-            // 检查是否过期（parseToken内部已经会检查过期，这里额外确保）
-            return claims.getExpiration().after(new Date());
-        } catch (ExpiredJwtException e) {
-            // 令牌过期
-            System.out.println("JWT令牌已过期: " + e.getMessage());
-            return false;
-        } catch (MalformedJwtException e) {
-            // 令牌格式错误
-            System.out.println("JWT令牌格式错误: " + e.getMessage());
-            return false;
-        } catch (SignatureException e) {
-            // 签名验证失败
-            System.out.println("JWT签名无效: " + e.getMessage());
-            return false;
-        } catch (JwtException | IllegalArgumentException e) {
-            // 其他JWT异常
-            System.out.println("JWT令牌无效: " + e.getMessage());
-            return false;
-        }
     }
 }

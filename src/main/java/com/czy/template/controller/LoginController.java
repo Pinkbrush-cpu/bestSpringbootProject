@@ -32,15 +32,12 @@ public class LoginController {
         String password = loginRequest.get("password");
 
         if (username == null || password == null) {
-            return Result.error("用户名和密码不能为空");
+            return Result.error("用户名或密码不能为空");
         }
 
         User user = userMapper.findByUsername(username);
-        if (user == null) {
-            return Result.error("用户名不存在");
-        }
-        if (!user.getPassword().equals(password)) {
-            return Result.error("密码错误");
+        if (user == null || !user.getPassword().equals(password)) {
+            return Result.error("用户名或密码错误！");
         }
 
         // 权限路由

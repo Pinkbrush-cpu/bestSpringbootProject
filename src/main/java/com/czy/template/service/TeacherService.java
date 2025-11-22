@@ -91,9 +91,7 @@ public class TeacherService {
         return sb.toString();
     }
 
-    /**
-     * 判断字符是否是全角（中文、日文、韩文等 CJK 字符）
-     */
+
     private boolean isFullWidth(char c) {
         Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
         return ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
@@ -182,6 +180,7 @@ public class TeacherService {
     //发布考试
     public Boolean publishExamService(PublicExamDTO dto){
         Exam exam = new Exam();
+        System.out.println(dto.getTotalTitle());
         BeanUtils.copyProperties(dto, exam);
         exam.setExamUuid(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
         HttpServletRequest request =
@@ -214,7 +213,7 @@ public class TeacherService {
             dto.setExamId(exam.getExam_id());
             dto.setTitle(exam.getTitle());
             dto.setTotalScore(exam.getTotalScore());
-            dto.setTotalTitles(exam.getTotalTitles());
+            dto.setTotalTitle(exam.getTotalTitle());
 
             // 处理 questionIds
             if (exam.getQuestionIds() != null && !exam.getQuestionIds().isEmpty()) {

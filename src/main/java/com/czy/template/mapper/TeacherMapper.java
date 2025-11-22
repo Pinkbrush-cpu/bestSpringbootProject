@@ -50,10 +50,10 @@ public interface TeacherMapper {
     @Update("update question set title = #{title}, options = #{options}, answer_text = #{answerText}, answer = #{answer}, score = #{score} where question_id = #{questionId}")
     boolean updateQuestionByqId(Question question);
 
-    @Insert("INSERT INTO exam(create_id,title,status,questionIds,totalScore,totalTitles,exam_uuid) VALUES (#{create_id},#{title},#{status},#{questionIds},#{totalScore},#{totalTitles},#{examUuid})")
+    @Insert("INSERT INTO exam(create_id,title,status,questionIds,totalScore,totalTitle,exam_uuid) VALUES (#{create_id},#{title},#{status},#{questionIds},#{totalScore},#{totalTitle},#{examUuid})")
     int publishExam(Exam exam);
 
-    @Update("update exam set title = #{title}, status = #{status}, questionIds = #{questionIds}, totalScore = #{totalScore}, totalTitles = #{totalTitles} where exam_id = #{exam_id}")
+    @Update("update exam set title = #{title}, status = #{status}, questionIds = #{questionIds}, totalScore = #{totalScore}, totalTitle = #{totalTitle} where exam_id = #{exam_id}")
     boolean updateExamByqId(Exam exam);
 
     //查看共有多少考试

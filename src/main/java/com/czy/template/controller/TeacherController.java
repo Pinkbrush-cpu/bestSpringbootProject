@@ -55,11 +55,9 @@ public class TeacherController {
     //将选中的题目信息返回前端
     @PostMapping("/selectQuestion")
     public Result<List<Question>> selectQuestion(@RequestBody IdsDTO ids) {
-
         return teacherService.selectQuestion(ids);
 
     }
-
 
     //修改题目
     @PutMapping("/{qId}/updateQuestion")
@@ -88,8 +86,6 @@ public class TeacherController {
             @RequestParam(defaultValue = "1") long page,
             @RequestParam(defaultValue = "12") long size,
             HttpServletRequest request) {
-
-
         return teacherService.examListService(page, size, request);
     }
 
