@@ -180,7 +180,6 @@ public class TeacherService {
     //发布考试
     public Boolean publishExamService(PublicExamDTO dto){
         Exam exam = new Exam();
-        System.out.println(dto.getTotalTitle());
         BeanUtils.copyProperties(dto, exam);
         exam.setExamUuid(UUID.randomUUID().toString().replace("-", "").substring(0, 12));
         HttpServletRequest request =
@@ -188,7 +187,7 @@ public class TeacherService {
                         .getRequest();
         //使用jwtUtil方法拿到id
         Long teacherId = jwtUtil.getUserFromRequest(request).getId();
-        exam.setCreate_id(teacherId);
+        exam.setCreateId(teacherId);
         exam.setStatus("已发布");
         try {
             exam.setQuestionIds(new ObjectMapper().writeValueAsString(dto.getQuestionIds()));
@@ -210,7 +209,7 @@ public class TeacherService {
 
         List<PublicExamDTO> records = exams.stream().map(exam -> {
             PublicExamDTO dto = new PublicExamDTO();
-            dto.setExamId(exam.getExam_id());
+            dto.setExamId(exam.getExamId());
             dto.setTitle(exam.getTitle());
             dto.setTotalScore(exam.getTotalScore());
             dto.setTotalTitle(exam.getTotalTitle());
