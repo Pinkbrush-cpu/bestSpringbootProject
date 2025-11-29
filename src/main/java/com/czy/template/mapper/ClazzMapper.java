@@ -136,8 +136,12 @@ public interface ClazzMapper {
     List<Long> selectClazzStudentId(@Param("clazzId") Long clazzId);
 
     @Update("UPDATE clazz_student SET state=1 WHERE clazz_id=#{clazzId} AND student_id = #{studentId}")
-    boolean updateClazzStudent(Long clazzId, Long studentId);
+    Boolean updateClazzStudent(Long clazzId, Long studentId);
 
     @Delete("delete from clazz_student where clazz_id = #{clazzId} AND student_id = #{studentId}")
-    boolean deleteClazzStudent(Long clazzId, Long studentId);
+    Boolean deleteClazzStudent(Long clazzId, Long studentId);
+
+    //查询是否有想加入班级的学生
+    @Select("SELECT student_id FROM clazz_student WHERE clazz_id = #{clazzId} AND state = 0 LIMIT 1")
+    Boolean getInterStatus(Long clazzId);
 }

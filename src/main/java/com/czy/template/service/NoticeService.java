@@ -37,7 +37,7 @@ public class NoticeService {
         }
 
         for (Long userId : targetUserIds) {
-            noticeMapper.insertStatus(userId, notice.getNId());
+            noticeMapper.insertStatus(userId, notice.getNoticeId());
         }
     }
 

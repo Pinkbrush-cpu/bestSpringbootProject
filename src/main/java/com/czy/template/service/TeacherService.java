@@ -210,7 +210,7 @@ public class TeacherService {
         List<PublicExamDTO> records = exams.stream().map(exam -> {
             PublicExamDTO dto = new PublicExamDTO();
             dto.setExamId(exam.getExamId());
-            dto.setTitle(exam.getTitle());
+            dto.setTitle(exam.getExamName());
             dto.setTotalScore(exam.getTotalScore());
             dto.setTotalTitle(exam.getTotalTitle());
 

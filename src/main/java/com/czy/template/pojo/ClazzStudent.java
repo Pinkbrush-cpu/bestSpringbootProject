@@ -8,5 +8,5 @@ public class ClazzStudent {
     public Long studentId;
     public Long clazzId;
     public String studentCode;
-    public int state;
+    public Integer state;
 }

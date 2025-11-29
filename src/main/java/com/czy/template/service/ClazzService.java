@@ -79,8 +79,10 @@ public class  ClazzService {
             v.setClassState(c.getClassState());
 
             v.setTeacherName(clazzMapper.selectTeachers(teacherId));
-
             v.setStudentCount(clazzMapper.selectStuCount(c.getClassId().intValue()));
+
+            Boolean status = clazzMapper.getInterStatus(c.getClassId());
+            v.setInterStatus(status != null && status);
 
             return v;
         }).collect(Collectors.toList());
@@ -123,6 +125,7 @@ public class  ClazzService {
             v.setTeacherName(clazzMapper.selectTeacherName(c.getTeacherId()));
 
             v.setStudentCount(clazzMapper.selectStuCount(c.getClassId().intValue()));
+
 
             return v;
         }).collect(Collectors.toList());
@@ -186,14 +189,18 @@ public class  ClazzService {
     }
 
     public Result<Void> approveClass(int action,Long clazzId, Long studentId) {
+        Boolean tamp;
         if(action == 1){
-            if (clazzMapper.updateClazzStudent(clazzId,studentId))
-                return Result.ok();
+            tamp = clazzMapper.updateClazzStudent(clazzId, studentId);
         }
         else {
-            if (clazzMapper.deleteClazzStudent(clazzId, studentId))
-                return Result.ok();
+            tamp = clazzMapper.deleteClazzStudent(clazzId, studentId);
         }
-        return Result.error("请求错误，请稍后重试！");
+
+        if(tamp == null)
+            return Result.error("请求数据不存在");
+        else
+            return Result.ok();
+
     }
 }

@@ -18,4 +18,6 @@ public class ClazzVO implements Serializable {
     private int studentMaxCount;       //班级最大人数
     private String classState;
 
+    private boolean interStatus;       //是否有进入班级的学生
+
 }

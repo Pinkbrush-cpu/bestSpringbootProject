@@ -93,7 +93,6 @@ public class ClassController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String keyword,
             HttpServletRequest req) {
-
         return Result.ok(clazzService.studentViewClass(page, size, keyword,req));
     }
 

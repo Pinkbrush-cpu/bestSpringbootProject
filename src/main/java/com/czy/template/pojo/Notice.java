@@ -7,9 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class Notice {
-    @JsonProperty("nId")
-    private long nId;                     //公告编号
-    private long createMid;               //创建管理员ID
+    private Long noticeId;                     //公告编号
+    private Long createMid;               //创建管理员ID
     private String title;                 //公告题目
     private String content;               //公告选项
     private String target;                //目标用户

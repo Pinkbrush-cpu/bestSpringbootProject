@@ -2,16 +2,17 @@ package com.czy.template.pojo;
 
 import lombok.Data;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Data
 public class Exam {
-    private Long examId;                  //考试id
-    private Long createId;               //创建教师id
-    private String title;                 //考试名称
-    private String status;                //考试状态
-    private String questionIds;           //考试题目
-    private int totalScore;               //总分数
-    private int totalTitle;               //总题目数
-    private String examUuid;              //考试编号，教师可以通过编号来发布考试
+    private Long examId;                                                               //考试id
+    private Long createId;                                                             //创建教师id
+    private String examName;                                                              //考试名称
+    private String status;                                                             //考试状态
+    private String questionIds;                                                        //考试题目
+    private Double totalScore;               //总分数
+    private Integer totalTitle;                                                        //总题目数
+    private String examUuid;                                                           //考试编号，教师可以通过编号来发布考试
 }

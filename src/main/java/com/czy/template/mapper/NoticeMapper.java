@@ -13,7 +13,7 @@ public interface NoticeMapper {
     void insert(Notice notice);
 
     @Select("SELECT n.* FROM notice n " +
-            "JOIN user_notice_status s ON n.n_id = s.notice_id " +
+            "JOIN user_notice_status s ON n.notice_id = s.notice_id " +
             "WHERE s.user_id = #{userId} AND s.status = 0")
     List<Notice> findUnreadByUserId(@Param("userId") Long userId);
 
