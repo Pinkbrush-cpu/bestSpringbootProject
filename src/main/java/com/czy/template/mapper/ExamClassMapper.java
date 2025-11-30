@@ -2,6 +2,7 @@ package com.czy.template.mapper;
 
 import com.czy.template.pojo.ExamClazz;
 import com.czy.template.view.vo.ExamClazzVO;
+import com.czy.template.view.vo.ExamScoreVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -47,10 +48,10 @@ public interface ExamClassMapper {
     /**
      * 查询考试详情
      */
-    @Select("SELECT ec.*, e.exam_name, e.description, s.subject_name " +
+    @Select("SELECT ec.exam_clazz_id,ec.exam_start_time ,ec.exam_time , e.exam_name, e.totalScore, er.score " +
             "FROM exam_clazz ec " +
             "LEFT JOIN exam e ON ec.exam_id = e.exam_id " +
-            "LEFT JOIN subject s ON e.subject_id = s.subject_id " +
-            "WHERE ec.exam_clazz_id = #{examClazzId}")
-    ExamClazz selectExamDetail(@Param("examClazzId") Long examClazzId);
+            "LEFT JOIN exam_record er ON er.exam_id = ec.exam_id " +
+            "WHERE ec.clazz_id = #{clazzId} AND er.student_id = #{studentId}")
+    List<ExamScoreVO> selectExamDetail(@Param("clazzId") Long clazzId, @Param("studentId") Long studentId);
 }
