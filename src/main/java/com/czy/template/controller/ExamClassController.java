@@ -1,15 +1,15 @@
 package com.czy.template.controller;
 
-import com.czy.template.pojo.ExamClazz;
-import com.czy.template.pojo.ExamRecord;
 import com.czy.template.service.ExamClassService;
 import com.czy.template.util.Result;
 import com.czy.template.view.vo.ExamClazzVO;
 import com.czy.template.view.vo.ExamScoreVO;
+import com.czy.template.view.vo.TakeExamVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -39,6 +39,17 @@ public class ExamClassController {
         }
     }
 
+    //验证考试
+    @PostMapping("validateExam")
+    public Result<Void> validateExam(
+            @RequestParam Long examClazzId,
+            @RequestParam Long classId,
+            @RequestParam Date timestamp
+    ) {
+        System.out.println("验证考试: examClazzId=" + examClazzId + ", classId=" + classId + ", timestamp=" + timestamp);
+        return Result.ok();
+    }
+
 //    @PostMapping("/{examClazzId}/start")
 //    public Result startExam(@PathVariable Long examClazzId, HttpServletRequest request) {
 //        try {
@@ -52,4 +63,13 @@ public class ExamClassController {
 //            return Result.error("开始考试失败: " + e.getMessage());
 //        }
 //    }
+
+
+    //获取学生开始考试的数据
+    @GetMapping("/take/{examClazzId}")
+    public Result<TakeExamVO> takeExam(@PathVariable Long examClazzId) {
+        return examClassService.takeExam(examClazzId);
+    }
+
+
 }

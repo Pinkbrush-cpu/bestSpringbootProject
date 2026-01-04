@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ExamClazzVO {
+    private Long examClazzId;
     private Long examId;
     private LocalDateTime examStartTime;
     private Long examTime;                  //考试时间，分钟

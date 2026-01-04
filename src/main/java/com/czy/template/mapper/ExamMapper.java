@@ -17,4 +17,7 @@ public interface ExamMapper {
 
     @Insert("INSERT INTO exam_clazz (exam_id,clazz_id,create_id,exam_start_time,exam_time,create_time,state) VALUES (#{examId},#{clazzId},#{createId},#{examStartTime},#{examTime},#{createTime},#{state})")
     boolean publishExamByUuid(ExamClazz examClazz);
+
+    @Select("SELECT exam_id , exam_name, questionIds, totalScore FROM exam WHERE exam_id = #{exam_id}")
+    Exam getExamByExamId(Long exam_id);
 }

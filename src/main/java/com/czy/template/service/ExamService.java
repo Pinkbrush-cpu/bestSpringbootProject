@@ -1,14 +1,18 @@
 package com.czy.template.service;
 
 import com.czy.template.mapper.ExamMapper;
+import com.czy.template.mapper.TeacherMapper;
 import com.czy.template.pojo.Exam;
 import com.czy.template.pojo.ExamClazz;
+import com.czy.template.pojo.Question;
 import com.czy.template.util.Result;
 import com.czy.template.view.dto.PublishExamDTO;
+import com.czy.template.view.vo.TakeExamVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +20,9 @@ public class ExamService {
 
     @Autowired
     ExamMapper examMapper;
+
+    @Autowired
+    TeacherMapper teacherMapper;
 
 
     public Result<List<Exam>> getExamList(Long id) {
@@ -38,7 +45,6 @@ public class ExamService {
         examClazz.setState("未开始");
 
         if(examMapper.publishExamByUuid(examClazz)) {
-            System.out.println(123);
             return Result.ok();
         }
 

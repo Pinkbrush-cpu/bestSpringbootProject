@@ -13,4 +13,5 @@ public class ExamScoreVO {
     private String examName;
     private Double totalScore;
     private Double score;
+    private String state;
 }
